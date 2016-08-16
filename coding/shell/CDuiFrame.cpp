@@ -565,7 +565,7 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect()
 {
 	for (size_t i = 0; i < m_vvTreeNode.size(); i++)
 	{
-		vector<CTreeNodeUI*> vecTreeNode = *m_vvTreeNode[i];
+		vector<CTreeNodeUI*>& vecTreeNode = *m_vvTreeNode[i];
 		for (size_t j = 0; j < vecTreeNode.size(); j++)           
 		{
 			if (vecTreeNode[j]->IsSelected())
