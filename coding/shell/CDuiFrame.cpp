@@ -463,7 +463,6 @@ void CDuiFrameWnd::refreshDB()
 
 void CDuiFrameWnd::unloadDB()
 {
-	CControlUI 
 	if (m_iCurDBIndex < 0)
 	{
 		MessageBoxA(NULL,"请选择一个数据库","faild",MB_OK);
