@@ -1,0 +1,34 @@
+#include "afxres.h"
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION @MXX_FILE_VERSION@
+ PRODUCTVERSION @MXX_PRODUCT_VERSION@
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x40004L
+ FILETYPE 0x0L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "000004b0"
+        BEGIN
+            VALUE "CompanyName", "@MXX_COMPANY_NAME@\0"
+            VALUE "FileDescription", "@MXX_FILE_DESCRIPTION@\0"
+            VALUE "FileVersion", "@MXX_FILE_VERSION@\0"
+            VALUE "InternalName", "@MXX_INTERNAL_NAME@\0"
+            VALUE "LegalCopyright", "@MXX_COPYRIGHT@\0"
+            VALUE "OriginalFilename", "@MXX_ORIGINAL_FILE_NAME@\0"
+            VALUE "ProductName", "@MXX_PRODUCT_NAME@\0"
+            VALUE "ProductVersion", "@MXX_PRODUCT_VERSION@\0"
+            VALUE "MIMEType", "@MXX_NPPLUGIN_MIMETYPE@\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0, 1200
+    END
+END

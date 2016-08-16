@@ -1,0 +1,82 @@
+﻿生成启动时间为 2016/7/24 20:57:12。
+     1>项目“E:\work\coding\wke\vs2010\JavaScriptCore.vcxproj”在节点 3 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在创建“E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\obj\JavaScriptCore\JavaScriptCore.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       PreBuildEvent:
+         REM Do not edit from the Visual Studio IDE! Customize via a JavaScriptCorePreBuild.cmd file.
+         if not exist "E:\work\coding\wke\vs2010\JavaScriptCorePreBuild.cmd" exit /b
+         
+         set CONFIGURATIONBUILDDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite
+         set CONFIGURATIONNAME=Debug_Cairo_CFLite
+         set INPUTDIR=
+         set INPUTFILENAME=
+         set INPUTPATH=
+         set INTDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\obj\JavaScriptCore\
+         set LIBRARYCONFIGSUFFIX=
+         set OUTDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\lib\
+         set PLATFORMNAME=Win32
+         set PROJECTDIR=E:\work\coding\wke\vs2010\
+         set PROJECTFILENAME=JavaScriptCore.vcxproj
+         set PROJECTNAME=JavaScriptCore
+         set PROJECTPATH=E:\work\coding\wke\vs2010\JavaScriptCore.vcxproj
+         set SOLUTIONDIR=E:\work\coding\wke\vs2010\
+         set SOLUTIONFILENAME=wke.sln
+         set SOLUTIONNAME=wke
+         set SOLUTIONPATH=E:\work\coding\wke\vs2010\wke.sln
+         set TARGETDIR=E:\work\coding\wke\build\vs2010\Debug_Cairo_CFLite\lib\
+         set TARGETEXT=.lib
+         set TARGETFILENAME=JavaScriptCore_debug.lib
+         set TARGETPATH=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\lib\JavaScriptCore_debug.lib
+         set WEBKITCONFIGSUFFIX=_debug
+         set WEBKITDLLCONFIGSUFFIX=_debug
+         
+         REM If any of the above variables didn't exist previously and
+         REM were set to an empty string, set will set the errorlevel to 1,
+         REM which will cause the project-specific script to think the build
+         REM has failed. This cmd /c call will clear the errorlevel.
+         cmd /c
+         
+         "E:\work\coding\wke\vs2010\JavaScriptCorePreBuild.cmd"
+         :VCEnd
+         'grep' 不是内部或外部命令，也不是可运行的程序
+         或批处理文件。
+     1>C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: 命令“REM Do not edit from the Visual Studio IDE! Customize via a JavaScriptCorePreBuild.cmd file.
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: if not exist "E:\work\coding\wke\vs2010\JavaScriptCorePreBuild.cmd" exit /b
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: 
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set CONFIGURATIONBUILDDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set CONFIGURATIONNAME=Debug_Cairo_CFLite
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set INPUTDIR=
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set INPUTFILENAME=
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set INPUTPATH=
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set INTDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\obj\JavaScriptCore\
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set LIBRARYCONFIGSUFFIX=
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set OUTDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\lib\
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set PLATFORMNAME=Win32
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set PROJECTDIR=E:\work\coding\wke\vs2010\
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set PROJECTFILENAME=JavaScriptCore.vcxproj
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set PROJECTNAME=JavaScriptCore
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set PROJECTPATH=E:\work\coding\wke\vs2010\JavaScriptCore.vcxproj
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set SOLUTIONDIR=E:\work\coding\wke\vs2010\
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set SOLUTIONFILENAME=wke.sln
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set SOLUTIONNAME=wke
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set SOLUTIONPATH=E:\work\coding\wke\vs2010\wke.sln
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set TARGETDIR=E:\work\coding\wke\build\vs2010\Debug_Cairo_CFLite\lib\
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set TARGETEXT=.lib
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set TARGETFILENAME=JavaScriptCore_debug.lib
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set TARGETPATH=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\lib\JavaScriptCore_debug.lib
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set WEBKITCONFIGSUFFIX=_debug
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: set WEBKITDLLCONFIGSUFFIX=_debug
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: 
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: REM If any of the above variables didn't exist previously and
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: REM were set to an empty string, set will set the errorlevel to 1,
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: REM which will cause the project-specific script to think the build
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: REM has failed. This cmd /c call will clear the errorlevel.
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: cmd /c
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: 
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: "E:\work\coding\wke\vs2010\JavaScriptCorePreBuild.cmd"
+C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\Microsoft.CppCommon.targets(103,5): error MSB3073: :VCEnd”已退出，代码为 1。
+     1>已完成生成项目“E:\work\coding\wke\vs2010\JavaScriptCore.vcxproj”(build 个目标)的操作 - 失败。
+
+生成失败。
+
+已用时间 00:00:00.05

@@ -1,0 +1,49 @@
+set(MXX_CMAKE_DIR ${CMAKE_CURRENT_LIST_DIR} CACHE INTERNAL "mxx cmake script directory")
+
+include("${MXX_CMAKE_DIR}/mxx_macros.cmake")
+include("${MXX_CMAKE_DIR}/mxx_utf8.cmake")
+
+# In cmake:
+#	*.a *.lib is archive
+#	*.so *.dll is library
+#	*.exe elf is runtime
+set(MXX_OUTPUT_ROOT_DIRECOTRY "${CMAKE_BINARY_DIR}/${CMAKE_PROJECT_NAME}")
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${MXX_OUTPUT_ROOT_DIRECOTRY}/lib")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${MXX_OUTPUT_ROOT_DIRECOTRY}/bin")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${MXX_OUTPUT_ROOT_DIRECOTRY}/bin")
+
+string(TOUPPER "${CMAKE_BUILD_TYPE}" BUILD_TYPE_UPPER)
+
+if(NOT("!${CMAKE_SYSTEM_NAME}" STREQUAL "!Windows"))
+	message(FATAL_ERROR "Unsupport platform: ${CMAKE_SYSTEM_NAME}!")
+endif()
+
+_check_compiler()
+
+if(CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_CONFIGURATION_TYPES STREQUAL CMAKE_BUILD_TYPE)
+	# do not support multi-configurations
+	set(CMAKE_CONFIGURATION_TYPES ${CMAKE_BUILD_TYPE}
+		CACHE STRING "Configurations, do not change it, change CMAKE_BUILD_TYPE please." FORCE)
+endif()
+
+set(MXX_ICONV_PATH "${MXX_CMAKE_DIR}/bin/win32/iconv.exe")
+
+set(CONFIG_TEMPLATE_DIR "${MXX_CMAKE_DIR}/config_template")
+set(FILE_VERSION "0.0.0.0" CACHE STRING "file version info")
+set(PRODUCT_VERSION "0.0.0.0" CACHE STRING "product version info")
+set(CONFIGURE_FILE_DIRECTORY "${CMAKE_BINARY_DIR}/wps_configure_file")
+
+# do not support multi-configurations
+if(CMAKE_CONFIGURATION_TYPES)
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+	set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE "${CMAKE_ARCHIVE_OUTPUT_DIRECTORY}")
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+	set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}")
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+	set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+endif()
+
+_config_install_info_script()
+_record_build_configure()
+_config_setupcfg()
+_config_signfile()

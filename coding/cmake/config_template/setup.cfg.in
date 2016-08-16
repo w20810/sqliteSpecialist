@@ -1,0 +1,13 @@
+[Version]
+MajorVersion=@MAJORVERSION@
+FirstVersion=@FIRSTVERSION@
+SecondVersion=@SECONDVERSION@
+Version=@DISPLAY_VERSION@
+
+[Local]
+UILanguage=2052
+ContentEnabledLangs=1
+SupportNewLangs=1
+
+[UpdateSvr]
+DefaultAddress=http://update.mcc.wps.cn/updateserver/update

@@ -1,0 +1,10 @@
+# 本文件记录构建过程中所有的配置信息
+[DirectoryName]
+WPS_Output_Root_Directory = @MXX_OUTPUT_ROOT_DIRECOTRY@
+WPS_Archive_Output_Directory = @CMAKE_ARCHIVE_OUTPUT_DIRECTORY@
+WPS_Library_Output_Directory = @CMAKE_LIBRARY_OUTPUT_DIRECTORY@
+WPS_Runtime_Output_Directory = @CMAKE_RUNTIME_OUTPUT_DIRECTORY@
+WPS_Configure_File_Directory = @CONFIGURE_FILE_DIRECTORY@
+
+[BuildInfo]
+WPS_Solution_Name = @CMAKE_PROJECT_NAME@

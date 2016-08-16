@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window size="800,600" mininfo="0,0" caption="0,0,0,32" sizebox="4,4,4,4"> <!-- 窗口的初始尺寸(宽800，高600)、窗口的最小尺寸(宽600，高400)、标题栏拖拽区域(高32)、可拖拽边框大小(这里添加sizebox后就可以拖拽边框调整大小了) -->
+    <Font name="宋体" size="13" bold="false" />
+    <Font name="宋体" size="12" bold="true" underline="true"/>
+    <Font name="宋体" size="12" />
+    <Font name="宋体" size="18" bold="true"/>
+    <Font name="微软雅黑" size="13" />
+    <Font name="微软雅黑" size="15" bold="true" />
+    <Font name="微软雅黑" size="15" />
+     <Default name="VScrollBar" value="button1normalimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,0,16,16&apos;&quot; button1hotimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,0,16,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button1pushedimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,16,16,32&apos; mask=&apos;#FFFF00FF&apos;&quot; button1disabledimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,0,16,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button2normalimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,32,16,48&apos; mask=&apos;#FFFF00FF&apos;&quot; button2hotimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,32,16,48&apos; mask=&apos;#FFFF00FF&apos;&quot; button2pushedimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,48,16,64&apos; mask=&apos;#FFFF00FF&apos;&quot; button2disabledimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,32,16,48&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbnormalimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,64,16,80&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbhotimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,64,16,80&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbpushedimage=&quot;ffile=&apos;resource/scroll.png&apos; source=&apos;0,64,16,80&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbdisabledimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,64,16,80&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; railnormalimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,80,16,96&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; railhotimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,80,16,96&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; railpushedimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,96,16,112&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; raildisabledimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,80,16,96&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bknormalimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,128,16,146&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bkhotimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,128,16,146&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bkpushedimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,128,16,146&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bkdisabledimage=&quot;file=&apos;resource/scroll.png&apos; source=&apos;0,128,16,146&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; " />
+     <Default name="HScrollBar" value="button1normalimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;0,0,16,16&apos;&quot; button1hotimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;0,0,16,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button1pushedimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;16,0,32,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button1disabledimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;0,0,16,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button2normalimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;32,0,48,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button2hotimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;32,0,48,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button2pushedimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;48,0,64,16&apos; mask=&apos;#FFFF00FF&apos;&quot; button2disabledimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;32,0,48,16&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbnormalimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;64,0,80,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbhotimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;64,0,80,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbpushedimage=&quot;ffile=&apos;resource/scrollH.png&apos; source=&apos;64,0,80,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; thumbdisabledimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;64,0,80,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; railnormalimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;80,0,96,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; railhotimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;80,0,96,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; railpushedimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;96,0,112,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; raildisabledimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;80,0,96,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bknormalimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;128,0,146,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bkhotimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;128,0,146,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bkpushedimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;128,0,146,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; bkdisabledimage=&quot;file=&apos;resource/scrollH.png&apos; source=&apos;128,0,146,16&apos; corner=&apos;2,2,2,2&apos; mask=&apos;#FFFF00FF&apos;&quot; " />    
+
+    <VerticalLayout bkcolor="#FFF0F0F0" bkcolor2="#FFFFFFFF"  inset="3,3,3,3" bordersize="1" bordercolor="#FF666666"> <!-- 整个窗口的背景色 -->
+        <!-- 标题栏区 -->
+        <HorizontalLayout  height="28" bkcolor="#FFE6E6DC" bkcolor2="#FFAAAAA0" font="4"> <!-- 标题栏背景色 bkcolor、bkcolor2、bkcolor3分别是渐变色的三个值-->     
+    		<Label	bkimage="resource/openDB.png"	width="25" />
+            <Label text="sqliteSpecialist" textcolor="#FF555555" glowsize="0" width="120" font="6" />
+          
+            <Control /> <!-- 占空位，占据左边所有的空位-->
+        <!-- 右边三个控件所占的宽度-->
+                <Button name="minbtn"   tooltip="最小化" float="false" pos="0,5,22,24"  width="23" normalimage=" file='resource/MinNormal.bmp' " hotimage=" file='resource/MinFocus.bmp' " pushedimage=" file='resource/MinFocus.bmp' "/>
+                <Button name="maxbtn"   tooltip="最大化" float="false" pos="22,5,44,24" width="23" normalimage=" file='resource/MaxNormal.bmp' " hotimage=" file='resource/MaxFocus.bmp' " pushedimage=" file='resource/MaxFocus.bmp' " />
+                <Button name="restorebtn" visible="false" tooltip="还原" float="false" pos="22,5,44,24" width="23" normalimage=" file='resource/StoreNormal.bmp' " hotimage=" file='resource/StoreFocus.bmp' " pushedimage=" file='resource/StoreFocus.bmp' " />
+                <Button name="closebtn" tooltip="关闭"   float="false" pos="44,5,74,24" width="28" normalimage=" file='resource/CloseNormal.bmp' " hotimage=" file='resource/CloseFocus.bmp' " pushedimage=" file='resource/CloseFocus.bmp' "/>     
+              
+        </HorizontalLayout> 
+        
+        <HorizontalLayout height="26">
+            <Button name="OpenFile" text="open(Q)"  tooltip="打开文件"   width="65" height="26" shortcut="Q" hotimage=" file='resource/221.bmp' corner='2,2,2,2' "  pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4"/>
+
+            <Button name="CloseFile" text="close(T)" tooltip="关闭文件"   width="65" height="26" shortcut="T" hotimage=" file='resource/221.bmp' corner='2,2,2,2' " pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4"/>
+
+            <Button name="Refresh" text="refresh(R)" tooltip="刷新数据库"   width="75" height="26" shortcut="R" hotimage=" file='resource/221.bmp' corner='2,2,2,2' "  pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4"/>
+
+            
+        </HorizontalLayout>
+        <HorizontalLayout height="21">
+            <Label name="DBPath" font="4" bkimage="file='resource/221.bmp' corner='2,2,2,2'" />
+        </HorizontalLayout>
+        
+        <!-- 客户区 -->
+        <HorizontalLayout  >
+            
+
+            <HorizontalLayout bkcolor="#FFFFFFFF"  bordersize="1" bordercolor="#FF666666" inset="2,2,2,2" width="270" sepimm="true" sepwidth="6"  >
+                <TreeView name="TreeViewDemo"  bkcolor="#001234FF" visiblefolderbtn="true" visiblecheckbtn="true" vscrollbar="true" hscrollbar="true"  />
+            </HorizontalLayout>
+          
+          <VerticalLayout>
+            <HorizontalLayout  height="26">
+
+                <Option name="data_tab"   text="data(Y)"   width="80"  shortcut="Y" hotimage=" file='resource/221.bmp' corner='2,2,2,2' " normalimage=" file='resource/222.bmp' corner='2,2,2,2' " pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4"  selectedtextcolor="#FF0000FF"  group="tabHeader" selected="true"   textpadding="20,0,0,0" foreimage="dest='2,2,20,23'  res='resource/data.png'" />
+                <Option name="sql_tab"    text="sql(U)"    width="68"  shortcut="U" hotimage=" file='resource/221.bmp' corner='2,2,2,2' " normalimage=" file='resource/222.bmp' corner='2,2,2,2' " pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4"  selectedtextcolor="#FF0000FF"   group="tabHeader" textpadding="20,0,0,0" foreimage="dest='2,2,20,23'  res='resource/sql.png'"  />   <!--  selectedbkcolor="#FFC5D4F2" -->
+
+                <Option name="design_tab" text="design(I)" width="80"  shortcut="I" hotimage=" file='resource/221.bmp' corner='2,2,2,2' " normalimage=" file='resource/222.bmp' corner='2,2,2,2' " pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4"  selectedtextcolor="#FF0000FF"   group="tabHeader" textpadding="20,0,0,0" foreimage="dest='2,2,20,23'  res='resource/design.png'"  />
+
+            	<!--Button name="RefreshTable" text="refresh" tooltip="刷新表" width="75"  hotimage=" file='resource/221.bmp' corner='2,2,2,2' " normalimage=" file='resource/222.bmp' corner='2,2,2,2' " pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4" textpadding="20,0,0,0" foreimage="dest='2,2,20,23'  res='resource/refresh.png'"  / -->
+               
+            </HorizontalLayout>
+
+            <TabLayout name="tab_switch">
+
+                <HorizontalLayout  >
+                    <VerticalLayout bordersize="1" bordercolor="#FF666666" inset="0,0,2,2">
+                        <List name="ListDemo1" vscrollbar="true" hscrollbar="true"  itemfont="4"  itemalign="center" multiexpanding="false">
+                            <ListHeader name="domain" bkimage=" file='resource/list_header_bg.png' "  height="35"  >
+                            </ListHeader>
+                        </List>
+                    </VerticalLayout>
+                 </HorizontalLayout>
+
+                <VerticalLayout bordersize="1" bordercolor="#FF666666" inset="4,4,4,4">
+                    <VerticalLayout bordersize="1" bordercolor="#FF666666" inset="2,2,2,2" sepheight="6" sepimm="true" height="150">
+                      <RichEdit name="SQLedit"  tipvalue="输入sql语句,选中后按GO执行。" readonly="false" hscrollbar="true" vscrollbar="true" autohscroll="true"/>
+                    </VerticalLayout>
+
+                    <HorizontalLayout height="26">
+                        <Control />
+                         <Button name="SQLBtn" text="GO!" tooltip="点击执行sql语句" width="60" hotimage=" file='resource/221.bmp' corner='2,2,2,2' " normalimage=" file='resource/222.bmp' corner='2,2,2,2' " pushedimage=" file='resource/241.bmp' corner='2,2,2,2' " font="4" textpadding="20,0,0,0" foreimage="dest='2,2,20,23'  res='resource/go.png'"  />
+                    </HorizontalLayout>
+
+                    <VerticalLayout bordersize="1" bordercolor="#FF666666" inset="0,0,2,2">
+                        <List name="SQLList" vscrollbar="true" hscrollbar="true"  itemfont="4"  >
+                            <ListHeader name="SQLListHeader" bkimage=" file='resource/list_header_bg.png' "  height="35"  >
+                            </ListHeader>
+                        </List>
+                    </VerticalLayout>
+                </VerticalLayout>
+
+                <HorizontalLayout>
+                    <VerticalLayout bordersize="1" bordercolor="#FF666666" inset="0,0,2,2">
+                        <List name="designList" vscrollbar="true" hscrollbar="true"  itemfont="4" itemalign="center" >
+                            <ListHeader name="designListHeader" bkimage=" file='resource/list_header_bg.png' "  height="35"  >
+                                
+                            </ListHeader>
+                        </List>
+                    </VerticalLayout>
+                </HorizontalLayout>     
+            </TabLayout>
+        </VerticalLayout>
+        </HorizontalLayout>
+    </VerticalLayout>
+</Window>

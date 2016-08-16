@@ -1,0 +1,17 @@
+#"Coding\product\win32"
+ProgramFiles:
+    root: @BUILD_OUTPUT_ROOT_PATH@\bin
+    include: ['*.dll', '*.exe']
+    exclude: [ 'msvcp100.dll', 'msvcr100.dll', 'KPacket.exe', 'KUninstall.exe']
+    
+NewUninstall:
+    root: @BUILD_OUTPUT_ROOT_PATH@\setup\win32
+    include: ['uninst.exe']
+    exclude: []
+
+#"Coding\product"
+SetupPackage:
+    root: @BUILD_OUTPUT_ROOT_PATH@\packages
+    include: ['2052\*.exe']
+    exclude: []
+

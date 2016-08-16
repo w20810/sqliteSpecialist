@@ -1,0 +1,139 @@
+# CMAKE_C_FLAGS... for c 
+# CMAKE_CXX_FLAGS... for c++
+# CMAKE_<LANG>_FLAGS for common
+# CMAKE_<LANG>_FLAGS_DEBUG for debug configuration
+# CMAKE_<LANG>_FLAGS_RELEASE for release configuration
+# CMAKE_<LANG>_FLAGS_CRITICAL_RELEASE for some projects which is time critial, for example: et compiler module, wps render module
+
+add_definitions(
+	-DUNICODE
+	-D_UNICODE
+	-DNOMINMAX
+	-DWIN32 
+	-D_WINDOWS 
+	-D_CRT_SECURE_NO_WARNINGS 
+	-D_SCL_SECURE_NO_WARNINGS 
+	-D_CRT_NONSTDC_NO_WARNINGS
+	-D_SECURE_SCL=0 
+	-D_BIND_TO_CURRENT_VCLIBS_VERSION=1
+	)
+if(WPS_STATIC_CODE_ANALYZE)
+	add_definitions(-DCODE_ANALYSIS)
+endif()
+
+set(DISABLED_WARNING
+	4297 # 4297 will removed after deal cppunitex
+	4251
+	4355
+	4127
+	4512
+	4201
+	4100
+	4290
+	4961
+	
+	6255 # 2080
+	6387 # 803
+	6011 # 790
+	6326 # 565
+	6263 # 389
+	6001 # 387
+	6031 # 298
+	6246 # 206
+	6386 # 205
+	6400 # 197
+	6385 # 94
+	6328 # 86
+	6211 # 80
+	6384 # 63
+	6315 # 62
+	6278 # 54
+	6204 # 38
+	6269 # 35
+	6309 # 27
+	6230 # 25
+	6294 # 24
+	6244 # 24
+	6242 # 24
+	6053 # 22
+	6262 # 21
+	6273 # 21
+	6308 # 19
+	6239 # 16
+	6057 # 16
+	6054 # 14
+	6401 # 12
+	6258 # 10
+	6221 # 10
+	6219 # 9
+	6320 # 7
+	6283 # 7
+	6237 # 7
+	6250 # 7
+	6215 # 6
+	6284 # 6
+	6225 # 5
+	6323 # 4
+	6313 # 4
+	6297 # 4
+	6214 # 4
+	6303 # 3
+	6336 # 2
+	6298 # 2
+	6282 # 2
+	6277 # 2
+	6335 # 2
+	6302 # 2
+	6305 # 1
+	6295 # 1
+	6287 # 1
+	6280 # 1
+	6216 # 1
+	6289 # 1
+	6236 # 1
+	)
+
+set(CMAKE_C_FLAGS 
+	"/MP /W3 /WX /Zm500 /Zi /nologo /Oy- /Gm- /GS /Gd /GR")
+foreach(_x ${DISABLED_WARNING})
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /wd${_x} ")
+endforeach()
+if(WPS_STATIC_CODE_ANALYZE)
+	set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} /analyze ")
+endif()
+set(CMAKE_C_FLAGS_DEBUG "/D_DEBUG /RTC1")
+set(CMAKE_C_FLAGS_RELEASE "/DNDEBUG")
+
+set(CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} /EHsc")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG}")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE}")
+
+set(CXX_OPTIMIZATION_NONE_FLAGS "/Od /Ob0")
+set(CXX_OPTIMIZATION_MINSIZE_FLAGS "/O1 /Ob1 /Os")
+set(CXX_OPTIMIZATION_MAXSPEED_FLAGS "/O2 /Ob2 /Ot")
+
+set(CMAKE_IDL_FLAGS "/W3 /nologo /env win32 /Oicf")
+
+if(CMAKE_CL_64)
+	set(CMAKE_EXE_LINKER_FLAGS "/machine:X64 /debug /MANIFESTDEPENDENCY:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df'\"")
+else()
+	set(CMAKE_EXE_LINKER_FLAGS "/machine:X86 /debug /MANIFESTDEPENDENCY:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df'\"")
+endif()
+
+set(CMAKE_EXE_LINKER_FLAGS_RELEASE "/INCREMENTAL:NO /OPT:REF /OPT:ICF")
+set(CMAKE_EXE_LINKER_FLAGS_DEBUG "/INCREMENTAL")
+
+set(CMAKE_MODULE_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
+set(CMAKE_MODULE_LINKER_FLAGS_RELEASE ${CMAKE_EXE_LINKER_FLAGS_RELEASE})
+set(CMAKE_MODULE_LINKER_FLAGS_DEBUG ${CMAKE_EXE_LINKER_FLAGS_DEBUG})
+
+set(CMAKE_SHARED_LINKER_FLAGS ${CMAKE_EXE_LINKER_FLAGS})
+set(CMAKE_SHARED_LINKER_FLAGS_RELEASE ${CMAKE_EXE_LINKER_FLAGS_RELEASE})
+set(CMAKE_SHARED_LINKER_FLAGS_DEBUG ${CMAKE_EXE_LINKER_FLAGS_DEBUG})
+
+if(NOT CMAKE_RC_CREATE_SHARED_LIBRARY)
+	# avoid cmake's bug treat resource dll as normal dll
+	# use package(xxx_lngid LNG_LEGACY) instand of package(xxx SHARED)
+	set(CMAKE_RC_CREATE_SHARED_LIBRARY "${CMAKE_C_CREATE_SHARED_LIBRARY}")
+endif()
+

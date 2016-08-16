@@ -1,0 +1,154 @@
+﻿生成启动时间为 2016/7/24 20:57:11。
+     1>项目“E:\work\coding\wke\vs2010\WTF.vcxproj”在节点 3 上(build 个目标)。
+     1>InitializeBuildStatus:
+         正在创建“E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\obj\WTF\WTF.unsuccessfulbuild”，因为已指定“AlwaysCreate”。
+       PreBuildEvent:
+         REM Do not edit from the Visual Studio IDE! Customize via a WTFPreBuild.cmd file.
+         if not exist "E:\work\coding\wke\vs2010\WTFPreBuild.cmd" exit /b
+         
+         set CONFIGURATIONBUILDDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite
+         set CONFIGURATIONNAME=Debug_Cairo_CFLite
+         set INPUTDIR=
+         set INPUTFILENAME=
+         set INPUTPATH=
+         set INTDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\obj\WTF\
+         set LIBRARYCONFIGSUFFIX=
+         set OUTDIR=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\lib\
+         set PLATFORMNAME=Win32
+         set PROJECTDIR=E:\work\coding\wke\vs2010\
+         set PROJECTFILENAME=WTF.vcxproj
+         set PROJECTNAME=WTF
+         set PROJECTPATH=E:\work\coding\wke\vs2010\WTF.vcxproj
+         set SOLUTIONDIR=E:\work\coding\wke\vs2010\
+         set SOLUTIONFILENAME=wke.sln
+         set SOLUTIONNAME=wke
+         set SOLUTIONPATH=E:\work\coding\wke\vs2010\wke.sln
+         set TARGETDIR=E:\work\coding\wke\build\vs2010\Debug_Cairo_CFLite\lib\
+         set TARGETEXT=.lib
+         set TARGETFILENAME=WTF_debug.lib
+         set TARGETPATH=E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\lib\WTF_debug.lib
+         set WEBKITCONFIGSUFFIX=_debug
+         set WEBKITDLLCONFIGSUFFIX=_debug
+         
+         REM If any of the above variables didn't exist previously and
+         REM were set to an empty string, set will set the errorlevel to 1,
+         REM which will cause the project-specific script to think the build
+         REM has failed. This cmd /c call will clear the errorlevel.
+         cmd /c
+         
+         "E:\work\coding\wke\vs2010\WTFPreBuild.cmd"
+         :VCEnd
+       ClCompile:
+         d:\vs\VC\bin\CL.exe /c /IE:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\obj\JavaScriptCore\DerivedSources\ /I../Source/JavaScriptCore/ /I"../Source/JavaScriptCore/os-win32/" /I../Source/JavaScriptCore/wtf/ /I../Source/JavaScriptCore/wtf/threads/ /I../Source/JavaScriptCore/wtf/unicode/ /IE:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\include\private /IE:\work\coding\wke\vs2010\..\WebKitLibraries\win\include /IE:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\include\JavaScriptCore /IE:\work\coding\wke\vs2010\..\WebKitLibraries\win\include\pthreads /IE:\work\coding\wke\vs2010\..\WebKitLibraries\win\include\cairo /Zi /nologo /W4 /WX /Od /Oy- /D __STD_C /D DEBUG_ALL /D WIN32 /D _WINDOWS /D WINVER=0x502 /D _WIN32_WINNT=0x502 /D _WIN32_IE=0x603 /D _CRT_SECURE_CPP_OVERLOAD_STANDARD_NAMES=1 /D _HAS_EXCEPTIONS=0 /D BUILDING_WTF /D JS_NO_EXPORT /D CURL_STATICLIB /D LIBXML_STATIC /D LIBXSLT_STATIC /D PTW32_STATIC_LIB /D UCONFIG_NO_COLLATION=1 /D U_STATIC_IMPLEMENTATION /D ENABLE_CHANNEL_MESSAGING /D ENABLE_CLIENT_BASED_GEOLOCATION /D ENABLE_SQL_DATABASE /D ENABLE_DATALIST /D ENABLE_DETAILS /D ENABLE_FILTERS /D ENABLE_GEOLOCATION /D ENABLE_ICONDATABASE /D ENABLE_JAVASCRIPT_DEBUGGER /D ENABLE_MATHML /D ENABLE_METER_TAG /D ENABLE_SHARED_WORKERS /D ENABLE_SVG /D ENABLE_SVG_FONTS /D ENABLE_WEB_SOCKETS /D ENABLE_WORKERS /D ENABLE_XSLT /D _UNICODE /D UNICODE /Gm /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR- /Fo"E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\obj\WTF\\" /Fd"E:\work\coding\wke\vs2010\..\build\vs2010\Debug_Cairo_CFLite\lib\\WTF_debug.vc90.pdb" /Gd /TP /wd4018 /wd4068 /wd4099 /wd4100 /wd4127 /wd4138 /wd4180 /wd4189 /wd4201 /wd4244 /wd4251 /wd4275 /wd4288 /wd4291 /wd4305 /wd4344 /wd4355 /wd4389 /wd4481 /wd4503 /wd4505 /wd4510 /wd4512 /wd4610 /wd4706 /wd4800 /wd4951 /wd4952 /wd4996 /wd6011 /wd6031 /wd6211 /wd6246 /wd6255 /wd6387 /wd4396 /wd4819 /FIICUVersion.h /analyze- /errorReport:prompt ..\Source\JavaScriptCore\wtf\win\MainThreadWin.cpp ..\Source\JavaScriptCore\wtf\win\OwnPtrWin.cpp ..\Source\JavaScriptCore\wtf\unicode\UTF8.cpp ..\Source\JavaScriptCore\wtf\unicode\icu\CollatorICU.cpp ..\Source\JavaScriptCore\wtf\text\AtomicString.cpp ..\Source\JavaScriptCore\wtf\text\CString.cpp ..\Source\JavaScriptCore\wtf\text\StringBuilder.cpp ..\Source\JavaScriptCore\wtf\text\StringImpl.cpp ..\Source\JavaScriptCore\wtf\text\StringStatics.cpp ..\Source\JavaScriptCore\wtf\text\WTFString.cpp "..\Source\JavaScriptCore\wtf\dtoa\bignum-dtoa.cc" ..\Source\JavaScriptCore\wtf\dtoa\bignum.cc "..\Source\JavaScriptCore\wtf\dtoa\cached-powers.cc" "..\Source\JavaScriptCore\wtf\dtoa\diy-fp.cc" "..\Source\JavaScriptCore\wtf\dtoa\double-conversion.cc" "..\Source\JavaScriptCore\wtf\dtoa\fast-dtoa.cc" "..\Source\JavaScriptCore\wtf\dtoa\fixed-dtoa.cc" ..\Source\JavaScriptCore\wtf\dtoa\strtod.cc ..\Source\JavaScriptCore\wtf\threads\win\BinarySemaphoreWin.cpp ..\Source\JavaScriptCore\wtf\threads\BinarySemaphore.cpp ..\Source\JavaScriptCore\wtf\Assertions.cpp ..\Source\JavaScriptCore\wtf\BitVector.cpp ..\Source\JavaScriptCore\wtf\ByteArray.cpp ..\Source\JavaScriptCore\wtf\CryptographicallyRandomNumber.cpp ..\Source\JavaScriptCore\wtf\CurrentTime.cpp ..\Source\JavaScriptCore\wtf\DecimalNumber.cpp ..\Source\JavaScriptCore\wtf\DynamicAnnotations.cpp ..\Source\JavaScriptCore\wtf\dtoa.cpp ..\Source\JavaScriptCore\wtf\FastMalloc.cpp ..\Source\JavaScriptCore\wtf\HashTable.cpp ..\Source\JavaScriptCore\wtf\MainThread.cpp ..\Source\JavaScriptCore\wtf\MetaAllocator.cpp ..\Source\JavaScriptCore\wtf\MD5.cpp ..\Source\JavaScriptCore\wtf\NullPtr.cpp ..\Source\JavaScriptCore\wtf\OSAllocatorWin.cpp ..\Source\JavaScriptCore\wtf\OSRandomSource.cpp ..\Source\JavaScriptCore\wtf\PageAllocationAligned.cpp ..\Source\JavaScriptCore\wtf\PageBlock.cpp ..\Source\JavaScriptCore\wtf\ParallelJobsGeneric.cpp ..\Source\JavaScriptCore\wtf\RandomNumber.cpp ..\Source\JavaScriptCore\wtf\RefCountedLeakCounter.cpp ..\Source\JavaScriptCore\wtf\SHA1.cpp ..\Source\JavaScriptCore\wtf\SizeLimits.cpp ..\Source\JavaScriptCore\wtf\StackBounds.cpp ..\Source\JavaScriptCore\wtf\StringExtras.cpp ..\Source\JavaScriptCore\wtf\TCSystemAlloc.cpp ..\Source\JavaScriptCore\wtf\Threading.cpp ..\Source\JavaScriptCore\wtf\ThreadingWin.cpp ..\Source\JavaScriptCore\wtf\ThreadSpecificWin.cpp ..\Source\JavaScriptCore\wtf\TypeTraits.cpp ..\Source\JavaScriptCore\wtf\WTFThreadData.cpp /bigobj 
+         WTFThreadData.cpp
+     1>..\Source\JavaScriptCore\wtf\WTFThreadData.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         TypeTraits.cpp
+     1>..\Source\JavaScriptCore\wtf\TypeTraits.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         ThreadSpecificWin.cpp
+     1>..\Source\JavaScriptCore\wtf\ThreadSpecificWin.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         ThreadingWin.cpp
+     1>..\Source\JavaScriptCore\wtf\ThreadingWin.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         Threading.cpp
+     1>..\Source\JavaScriptCore\wtf\Threading.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         TCSystemAlloc.cpp
+     1>..\Source\JavaScriptCore\wtf\TCSystemAlloc.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         StringExtras.cpp
+     1>..\Source\JavaScriptCore\wtf\StringExtras.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         StackBounds.cpp
+     1>..\Source\JavaScriptCore\wtf\StackBounds.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         SizeLimits.cpp
+     1>..\Source\JavaScriptCore\wtf\SizeLimits.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         SHA1.cpp
+     1>..\Source\JavaScriptCore\wtf\SHA1.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         RefCountedLeakCounter.cpp
+     1>..\Source\JavaScriptCore\wtf\RefCountedLeakCounter.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         RandomNumber.cpp
+     1>..\Source\JavaScriptCore\wtf\RandomNumber.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         ParallelJobsGeneric.cpp
+     1>..\Source\JavaScriptCore\wtf\ParallelJobsGeneric.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         PageBlock.cpp
+     1>..\Source\JavaScriptCore\wtf\PageBlock.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         PageAllocationAligned.cpp
+     1>..\Source\JavaScriptCore\wtf\PageAllocationAligned.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         OSRandomSource.cpp
+     1>..\Source\JavaScriptCore\wtf\OSRandomSource.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         OSAllocatorWin.cpp
+     1>..\Source\JavaScriptCore\wtf\OSAllocatorWin.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         NullPtr.cpp
+     1>..\Source\JavaScriptCore\wtf\NullPtr.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         MD5.cpp
+     1>..\Source\JavaScriptCore\wtf\MD5.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         MetaAllocator.cpp
+     1>..\Source\JavaScriptCore\wtf\MetaAllocator.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         正在生成代码...
+         正在编译...
+         MainThread.cpp
+     1>..\Source\JavaScriptCore\wtf\MainThread.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         HashTable.cpp
+     1>..\Source\JavaScriptCore\wtf\HashTable.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         FastMalloc.cpp
+     1>..\Source\JavaScriptCore\wtf\FastMalloc.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         dtoa.cpp
+     1>..\Source\JavaScriptCore\wtf\dtoa.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         DynamicAnnotations.cpp
+     1>..\Source\JavaScriptCore\wtf\DynamicAnnotations.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         DecimalNumber.cpp
+     1>..\Source\JavaScriptCore\wtf\DecimalNumber.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         CurrentTime.cpp
+     1>..\Source\JavaScriptCore\wtf\CurrentTime.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         CryptographicallyRandomNumber.cpp
+     1>..\Source\JavaScriptCore\wtf\CryptographicallyRandomNumber.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         ByteArray.cpp
+     1>..\Source\JavaScriptCore\wtf\ByteArray.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         BitVector.cpp
+     1>..\Source\JavaScriptCore\wtf\BitVector.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         Assertions.cpp
+     1>..\Source\JavaScriptCore\wtf\Assertions.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         BinarySemaphore.cpp
+     1>..\Source\JavaScriptCore\wtf\threads\BinarySemaphore.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         BinarySemaphoreWin.cpp
+     1>..\Source\JavaScriptCore\wtf\threads\win\BinarySemaphoreWin.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         strtod.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\strtod.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         fixed-dtoa.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\fixed-dtoa.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         fast-dtoa.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\fast-dtoa.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         double-conversion.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\double-conversion.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         diy-fp.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\diy-fp.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         cached-powers.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\cached-powers.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         bignum.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\bignum.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         正在生成代码...
+         正在编译...
+         bignum-dtoa.cc
+     1>..\Source\JavaScriptCore\wtf\dtoa\bignum-dtoa.cc : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         WTFString.cpp
+     1>..\Source\JavaScriptCore\wtf\text\WTFString.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         StringStatics.cpp
+     1>..\Source\JavaScriptCore\wtf\text\StringStatics.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         StringImpl.cpp
+     1>..\Source\JavaScriptCore\wtf\text\StringImpl.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         StringBuilder.cpp
+     1>..\Source\JavaScriptCore\wtf\text\StringBuilder.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         CString.cpp
+     1>..\Source\JavaScriptCore\wtf\text\CString.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         AtomicString.cpp
+     1>..\Source\JavaScriptCore\wtf\text\AtomicString.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         CollatorICU.cpp
+     1>..\Source\JavaScriptCore\wtf\unicode\icu\CollatorICU.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         UTF8.cpp
+     1>..\Source\JavaScriptCore\wtf\unicode\UTF8.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         OwnPtrWin.cpp
+     1>..\Source\JavaScriptCore\wtf\win\OwnPtrWin.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         MainThreadWin.cpp
+     1>..\Source\JavaScriptCore\wtf\win\MainThreadWin.cpp : fatal error C1083: 无法打开包括文件:“ICUVersion.h”: No such file or directory
+         正在生成代码...
+     1>已完成生成项目“E:\work\coding\wke\vs2010\WTF.vcxproj”(build 个目标)的操作 - 失败。
+
+生成失败。
+
+已用时间 00:00:01.62
