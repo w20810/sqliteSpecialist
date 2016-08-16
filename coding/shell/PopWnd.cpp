@@ -10,10 +10,12 @@ CDuiString PopWnd::GetSkinFile()
 {
 	return _T("resource/PopWnd.xml");
 }
+
 CDuiString PopWnd::GetSkinFolder()
 {
 	return _T("");
 }
+
 CDuiString GetValuesFormat(size_t propertyNumbers)
 {
 	if (propertyNumbers == 0)
@@ -30,6 +32,7 @@ CDuiString GetValuesFormat(size_t propertyNumbers)
 	str += L")";
 	return str;
 }
+
 bool checkDate(const char* strDate)
 {
 	const std::regex pattern("\\d{4}-(10|11|12|0?[1-9])-(30|31|[1-2][0-9]|0?[1-9])");
@@ -71,7 +74,7 @@ bool checkDate(const char* strDate)
 	return true;
 }
 
-void PopWnd::clearFrame()
+void PopWnd::ClearFrame()
 {
 	for (size_t i = 0; i < m_vPropertyName.size(); i++)
 	{
@@ -185,7 +188,6 @@ void PopWnd::OnNextBtn()
 	{
 		vFrameTextElem = m_pParentWnd->m_vSqlListTextElem;
 	}
-
 
 	for (vector<CListTextElementUI*>::iterator ite = vFrameTextElem.begin(); ite != vFrameTextElem.end(); ++ite)
 	{
@@ -308,116 +310,126 @@ void PopWnd::OnAddBtn()
 	m_enumSQL_STATU = YX__SQL__ADD ;
 }
 
+void PopWnd::OkAdd()
+{
+	try
+	{
+		CDuiString			strTableName	=	m_pParentWnd->m_CDuiStrActiveListItemTableName;
+		CDuiString			sql				=	CDuiString(L"insert into ") + strTableName + GetValuesFormat(m_vData.size());
+		int					a				=	1;
+		CppSQLite3Statement stm				=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->compileStatement(sql.GetStringA().c_str());
+
+		sql				=	CDuiString(L"select * from ") + strTableName;
+		CppSQLite3Query		query			=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->execQuery(sql.GetStringA().c_str());
+		for (size_t i = 0; i < m_vData.size(); i++)
+		{
+			stm.bind(i+1,m_vData[i]->GetText().GetStringUtf8().c_str());
+			if (string(query.fieldDeclType(i)) == string("date"))
+			{
+				if (!checkDate(m_vData[i]->GetText().GetStringA().c_str()))
+				{
+					stm.finalize();
+					MessageBoxA(NULL,"日期格式错误","faild",MB_OK);
+					return ;
+				}
+			}
+			query.nextRow();
+		}
+		stm.execDML();
+		stm.finalize();
+
+		//更新list数据
+		CListTextElementUI* pListElement = new CListTextElementUI;
+		if (m_pParentWnd->m_pList->Activate())
+		{
+			m_pParentWnd->m_pList->Add(pListElement);
+		}
+		else if (m_pParentWnd->m_pSqlList->Activate())
+		{
+			m_pParentWnd->m_pSqlList->Add(pListElement);
+		}
+
+		pListElement->SetAttribute(L"margin", L"20, 0, 0, 0");
+		pListElement->SetAttribute(L"textpadding",L"20, 20, 20, 20");
+		for (size_t i = 0; i < m_vData.size(); i++)
+		{
+			pListElement->SetText(i,m_vData[i]->GetText());
+		}
+		if (NULL != m_pParentWnd->m_pCurListTextElem)
+		{
+			m_pParentWnd->m_pCurListTextElem->Select(false);
+		}
+		m_pParentWnd->m_pCurListTextElem = pListElement;
+		pListElement->Select(true);
+
+		if (m_pParentWnd->m_pList->Activate())
+		{
+			m_pParentWnd->m_vCurListTextElem.push_back(pListElement);
+		}
+		else if (m_pParentWnd->m_pSqlList->Activate())
+		{
+			m_pParentWnd->m_vSqlListTextElem.push_back(pListElement);
+		}
+	}
+	catch(CppSQLite3Exception e)
+	{
+		MessageBoxA(NULL,e.errorMessage(),"Error",MB_OK);
+	}
+}
+
+void PopWnd::OkUpdate()
+{
+	try
+	{
+		if (NULL == m_pParentWnd->m_pCurListTextElem )
+		{
+			return ;
+		}
+		CDuiString		strTableName			=	m_pParentWnd->m_CDuiStrActiveListItemTableName;
+		CDuiString		sql						=	CDuiString(L"update ")+strTableName+CDuiString(L" set ");
+		CppSQLite3Query query					=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->execQuery(CDuiString(CDuiString(L"select* from ")+strTableName).GetStringA().c_str());
+		for (size_t i = 0; i < m_vData.size(); i++)
+		{
+			if (i != 0)
+			{
+				sql+=L" , ";
+			}
+			sql	+=	CDuiString(L"\"")+m_vPropertyName[i]->GetText()+CDuiString(L"\"")+L" = \""+ m_vData[i]->GetText()+L"\"";
+
+			if (string(query.fieldDeclType(i))==string("date"))
+			{
+				if (!checkDate(m_vData[i]->GetText().GetStringA().c_str()))
+				{
+					MessageBoxA(NULL,"日期格式错误","faild",MB_OK);
+					return ;
+				}
+			}
+			query.nextRow();
+		}
+
+		sql += CDuiString(L" where ")+strTableName+CDuiString(L".[")+m_vPropertyName[0]->GetText()+CDuiString(L"] ")+L" = \""+m_vOriginalData[0]+L"\"";
+		m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->execDML(sql.GetStringUtf8().c_str());
+
+		for (size_t i = 0; i < m_vData.size(); i++)
+		{
+			m_pParentWnd->m_pCurListTextElem->SetText(i,m_vData[i]->GetText());
+		}
+	}
+	catch(CppSQLite3Exception e)
+	{
+		MessageBoxA(NULL,e.errorMessage(),"Error",MB_OK);
+	}
+}
+
 void PopWnd::OnOkBtn()
 {
 	if (YX__SQL__ADD == m_enumSQL_STATU)
 	{
-		try
-		{
-			CDuiString			strTableName	=	m_pParentWnd->m_CDuiStrActiveListItemTableName;
-			CDuiString			sql				=	CDuiString(L"insert into ") + strTableName + GetValuesFormat(m_vData.size());
-			int					a				=	1;
-			CppSQLite3Statement stm				=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->compileStatement(sql.GetStringA().c_str());
-
-								sql				=	CDuiString(L"select * from ") + strTableName;
-			CppSQLite3Query		query			=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->execQuery(sql.GetStringA().c_str());
-			for (size_t i = 0; i < m_vData.size(); i++)
-			{
-				stm.bind(i+1,m_vData[i]->GetText().GetStringUtf8().c_str());
-				if (string(query.fieldDeclType(i)) == string("date"))
-				{
-					if (!checkDate(m_vData[i]->GetText().GetStringA().c_str()))
-					{
-						stm.finalize();
-						MessageBoxA(NULL,"日期格式错误","faild",MB_OK);
-						return ;
-					}
-				}
-				query.nextRow();
-			}
-			stm.execDML();
-			stm.finalize();
-
-			//更新list数据
-			CListTextElementUI* pListElement = new CListTextElementUI;
-			if (m_pParentWnd->m_pList->Activate())
-			{
-				m_pParentWnd->m_pList->Add(pListElement);
-			}
-			else if (m_pParentWnd->m_pSqlList->Activate())
-			{
-				m_pParentWnd->m_pSqlList->Add(pListElement);
-			}
-
-			pListElement->SetAttribute(L"margin", L"20, 0, 0, 0");
-			pListElement->SetAttribute(L"textpadding",L"20, 20, 20, 20");
-			for (size_t i = 0; i < m_vData.size(); i++)
-			{
-				pListElement->SetText(i,m_vData[i]->GetText());
-			}
-			if (NULL != m_pParentWnd->m_pCurListTextElem)
-			{
-				m_pParentWnd->m_pCurListTextElem->Select(false);
-			}
-			m_pParentWnd->m_pCurListTextElem = pListElement;
-			pListElement->Select(true);
-
-			if (m_pParentWnd->m_pList->Activate())
-			{
-				m_pParentWnd->m_vCurListTextElem.push_back(pListElement);
-			}
-			else if (m_pParentWnd->m_pSqlList->Activate())
-			{
-				m_pParentWnd->m_vSqlListTextElem.push_back(pListElement);
-			}
-		}
-		catch(CppSQLite3Exception e)
-		{
-			MessageBoxA(NULL,e.errorMessage(),"Error",MB_OK);
-		}
+		OkAdd();
 	}
 	else if (YX__SQL__UPDATE == m_enumSQL_STATU)
 	{
-		try
-		{
-			if (NULL == m_pParentWnd->m_pCurListTextElem )
-			{
-				return ;
-			}
-			CDuiString		strTableName			=	m_pParentWnd->m_CDuiStrActiveListItemTableName;
-			CDuiString		sql						=	CDuiString(L"update ")+strTableName+CDuiString(L" set ");
-			CppSQLite3Query query					=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->execQuery(CDuiString(CDuiString(L"select* from ")+strTableName).GetStringA().c_str());
-			for (size_t i = 0; i < m_vData.size(); i++)
-			{
-				if (i != 0)
-				{
-					sql+=L" , ";
-				}
-				sql	+=	CDuiString(L"\"")+m_vPropertyName[i]->GetText()+CDuiString(L"\"")+L" = \""+ m_vData[i]->GetText()+L"\"";
-
-				if (string(query.fieldDeclType(i))==string("date"))
-				{
-					if (!checkDate(m_vData[i]->GetText().GetStringA().c_str()))
-					{
-						MessageBoxA(NULL,"日期格式错误","faild",MB_OK);
-						return ;
-					}
-				}
-				query.nextRow();
-			}
-
-			sql += CDuiString(L" where ")+strTableName+CDuiString(L".[")+m_vPropertyName[0]->GetText()+CDuiString(L"] ")+L" = \""+m_vOriginalData[0]+L"\"";
-			m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->execDML(sql.GetStringUtf8().c_str());
-
-			for (size_t i = 0; i < m_vData.size(); i++)
-			{
-				m_pParentWnd->m_pCurListTextElem->SetText(i,m_vData[i]->GetText());
-			}
-		}
-		catch(CppSQLite3Exception e)
-		{
-			MessageBoxA(NULL,e.errorMessage(),"Error",MB_OK);
-		}
+		OkUpdate();
 	}
 }
 
@@ -467,13 +479,13 @@ void PopWnd::InitWindow()
 	m_pAddBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("AddBtn")));
 	m_pOkBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("OKBtn")));
 	m_pFirstBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetFirstBtn")));
-	m_pPreviousBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetPreviousBtn")));
+	m_pPreviousBtn	=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetPreviousBtn")));
 	m_pNextBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetNextBtn")));
 	m_pLastBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetLastBtn")));
 
 	m_enumSQL_STATU =	YX__SQL__UPDATE;
 	
-	clearFrame();
+	ClearFrame();
 	loadFrame();
 }
 void PopWnd::Notify(TNotifyUI& msg)
@@ -518,7 +530,6 @@ void PopWnd::Notify(TNotifyUI& msg)
 	__super::Notify(msg);
 }
 
-/////////////////////////////////////
 void PopWnd::setParentWnd(CDuiFrameWnd* parentWnd)
 {
 	this->m_pParentWnd = parentWnd;

@@ -2,15 +2,16 @@
 
 class PopWnd : public WindowImplBase
 {
-	//friend class CDuiFrameWnd;
 public:
 	virtual LPCTSTR GetWindowClassName()const ;
 	virtual CDuiString GetSkinFile() ;
 	virtual CDuiString GetSkinFolder();
 	virtual void InitWindow();
 	virtual void Notify(TNotifyUI& msg);
-
-	void clearFrame();
+	
+	void OkAdd();
+	void OkUpdate();
+	void ClearFrame();
 	void OnPreviousBtn();
 	void OnNextBtn();
 	void OnFirstBtn();

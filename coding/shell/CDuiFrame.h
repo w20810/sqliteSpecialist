@@ -3,8 +3,6 @@
 #include "sqlite3.h"
 #include "stdafx.h"
 
-class PopWnd;
-
 class CDuiFrameWnd : public WindowImplBase
 {
 	friend class PopWnd;
@@ -21,6 +19,7 @@ public :
 	
 	void AddTable(int DbIndex);
 	void ShowTable(string tabName,int DBIndex);
+	void ShowList(string sql,int DBIndex, CListUI* pList, vector<CListHeaderItemUI* >& vCurListHeader, vector<CListTextElementUI*>& vCurTextElem);
 	char* GetDbPath();
 	void loadDB(char *PathName,int DBIndex);
 	void executeSQL(string sql,int DBIndex);
@@ -39,7 +38,7 @@ public :
 private :
 
 	 CListUI*							m_pList;
-	 vector<CListHeaderItemUI*>			m_vCurListItem; //
+	 vector<CListHeaderItemUI*>			m_vCurListItem; 
 	 vector<CListTextElementUI*>		m_vCurListTextElem;
 
 	 CButtonUI*							m_btnOpenFile;

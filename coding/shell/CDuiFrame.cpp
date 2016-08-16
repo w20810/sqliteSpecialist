@@ -1,5 +1,4 @@
 #include <shlobj.h>
-#include <iostream>
 #include <string>
 #include "stdafx.h"
 #include "CDuiFrame.h"
@@ -22,7 +21,7 @@ TCHAR *char2tchar(char *str)
 	mbstowcs(chRtn, str, iLen+1);
 	return chRtn;
 }
-//将UTF-8编码转换为ASCII编码
+
 char* Utf82Unicode(const char* utf)
 {
 	if(!utf || !strlen(utf))
@@ -65,6 +64,7 @@ CDuiString CDuiFrameWnd::GetSkinFolder()
 {
 	return _T("");
 }
+
 /*
  LPCTSTR CDuiFrameWnd::GetResourceID() const  
 {  
@@ -84,7 +84,7 @@ CDuiString getTableNameFromSQL(const char* sql)//select  适用于简单的语句
 	{
 		if (isalpha(strSQL[i]))
 		{
-			strSQL[i]=tolower(strSQL[i]);
+			strSQL[i] = tolower(strSQL[i]);
 		}
 	}
 	size_t pos = strSQL.find("from");
@@ -108,7 +108,7 @@ char* CDuiFrameWnd::GetDbPath()
 	int csidl[3] = {CSIDL_APPDATA,CSIDL_COMMON_APPDATA,CSIDL_LOCAL_APPDATA};
 	for (int i = 0; i < 3 ; i++)
 	{
-		TCHAR szPath[MAX_PATH]={0};
+		TCHAR szPath[MAX_PATH] = {0};
 		SHGetSpecialFolderPath(NULL,szPath,csidl[i],TRUE);
 		::PathAddBackslashW(szPath);
 		_tcscat_s(szPath,MAX_PATH,L"Kingsoft\\PowerWord\\Powerword.db");
@@ -153,6 +153,7 @@ void CDuiFrameWnd::loadPowerWordDB()
 	(*m_vvTreeNode[m_iCurDBIndex])[0]->Select(true);
 	m_pDBPathLabel->SetText(m_vDBPath[m_iCurDBIndex]);
 }
+
 void CDuiFrameWnd::InitWindow()
 {
 	m_pTreeView			=	static_cast<CTreeViewUI*>(m_PaintManager.FindControl(_T("TreeViewDemo")));
@@ -179,7 +180,7 @@ void CDuiFrameWnd::InitWindow()
 	loadPowerWordDB();
 	addDesignListHeader();
 }
-void CDuiFrameWnd::loadDB(char* PathName,int DBIndex)
+void CDuiFrameWnd::loadDB(char* PathName, int DBIndex)
 {
 	//获取密码
 	std::wstring strhdid;
@@ -264,9 +265,14 @@ void CDuiFrameWnd::AddTable(int DBIndex)
 	}
 }
 
-void CDuiFrameWnd::executeSQL(string sql,int DBIndex)
+void CDuiFrameWnd::executeSQL(string sql, int DBIndex)
 {
-	if (m_iCurDBIndex < 0)
+	if (sql.empty())
+	{
+		MessageBoxA(NULL,"Please select the SQL statement.","faild",MB_OK);
+		return ;
+	}
+	if (DBIndex < 0)
 	{
 		MessageBoxA(NULL,"请选择一个数据库","faild",MB_OK);
 		return ;
@@ -281,15 +287,9 @@ void CDuiFrameWnd::executeSQL(string sql,int DBIndex)
 	m_vSqlListHeader.clear();
 
 	m_pSqlList->SetAttribute(L"itemalign",L"center");
+
 	try
 	{
-		if (sql.empty())
-		{
-			MessageBoxA(NULL,"Please select the SQL statement.","faild",MB_OK);
-			return ;
-		}
-		CppSQLite3Query query = m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
-		
 		string mod;
 		for (size_t i = 0;i < sql.size() && sql[i]!=' '; i++)
 		{
@@ -304,86 +304,18 @@ void CDuiFrameWnd::executeSQL(string sql,int DBIndex)
 		}
 		if (mod != string("SELECT"))
 		{
+			CppSQLite3Query query = m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
 			return ;
 		}
-
 		m_CDuiStrActiveListItemTableName = getTableNameFromSQL(sql.c_str());
-
-		int col = query.numFields();
-		vector<int > vTextLen(col,0);
-		vector<CListHeaderItemUI*> vHeadItem;
-
-		CString str(" ");
-		HDC hDC = ::GetDC(this->m_hWnd);
-		SIZE sz;
-		::GetTextExtentPoint32(hDC, str, str.GetLength(),&sz);
-		::ReleaseDC(this->m_hWnd, hDC);
-		int per = sz.cx+4;
-
-		for (int i = 0; i < col; i++)
-		{
-
-			const char* res		=	query.fieldName(i);
-			const char*	type	=	query.fieldDeclType(i);
-
-			CString Cstr(res);
-			CListHeaderItemUI*  pListHItem = new CListHeaderItemUI;
-			vHeadItem.push_back(pListHItem);
-
-			HDC hDC = ::GetDC(this->m_hWnd);
-			SIZE sz;
-			::GetTextExtentPoint32(hDC, Cstr, Cstr.GetLength(),&sz);
-			::ReleaseDC(this->m_hWnd, hDC);
-			int x = sz.cx;
-
-			vTextLen[i] =  vTextLen[i]>x?vTextLen[i]:x;
-			vTextLen[i] += 60+col+1;
-
-			pListHItem->SetName(Cstr);
-			pListHItem->SetText(Cstr);
-			pListHItem->SetFont(4);
-			pListHItem->SetAttribute(L"width",L"100");
-			pListHItem->SetAttribute(L"hotimage",L"resource/list_header_hot.png");
-			pListHItem->SetAttribute(L"pushedimage",L"resource/list_header_pushed.png");
-			pListHItem->SetAttribute(L"sepimage",L"resource/list_header_sep.png");
-			pListHItem->SetAttribute(L"sepwidth",L"1");
-			pListHItem->SetAttribute(L"minwidth",L"100");
-			m_pSqlList->Add(pListHItem);
-
-			m_vSqlListHeader.push_back(pListHItem);
-		}
-
-		m_pSqlList->NeedParentUpdate();
-		query=m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
-		while(!query.eof())
-		{
-			CListTextElementUI* pListElement = new CListTextElementUI;
-			m_pSqlList->Add(pListElement);
-			pListElement->SetAttribute(L"margin", L"20, 0, 0, 0");
-			pListElement->SetAttribute(L"textpadding",L"5, 5, 5, 5");
-			int col=query.numFields();
-			for(int i=0;i<col;i++)
-			{
-				const char* str = query.getStringField(i);
-				int			w	= strlen(str)*per;
-				vTextLen[i]     = vTextLen[i]>w?vTextLen[i]:w;
-
-				pListElement->SetText(i,LPCTSTR(Utf82Unicode(str)));
-			}
-			m_vSqlListTextElem.push_back(pListElement);
-			query.nextRow();		
-
-			for(int i=0;i<col;i++)
-			{
-				vHeadItem[i]->SetFixedWidth(vTextLen[i]+10);
-			}
-		}
-		query.finalize();
 	}
 	catch(CppSQLite3Exception e)
 	{
-		MessageBoxA(NULL,e.errorMessage(),"Error",MB_OK);
+		MessageBoxA(NULL, e.errorMessage(), "Error", MB_OK);
+		return ;
 	}
+
+	ShowList(sql,DBIndex, m_pSqlList,m_vSqlListHeader, m_vSqlListTextElem);
 }
 void CDuiFrameWnd::refreshDB()
 {
@@ -403,7 +335,6 @@ void CDuiFrameWnd::refreshDB()
 		(*m_vvTreeNode[m_iCurDBIndex]).pop_back();
 	}
 	(*m_vvTableName[m_iCurDBIndex]).clear();
-	
 
 	try
 	{
@@ -527,7 +458,7 @@ void CDuiFrameWnd::unloadDB()
 	m_pPopWnd->ShowWindow(false);
 }
 
-void CDuiFrameWnd::showDesign(string tabName,int DBIndex)
+void CDuiFrameWnd::showDesign(string tabName, int DBIndex)
 {
 	CListUI* pDesignList = static_cast<CListUI*>(m_PaintManager.FindControl(_T("designList")));
 	pDesignList->RemoveAll();
@@ -558,8 +489,6 @@ void CDuiFrameWnd::OnListTextElemActive(TNotifyUI& msg)
 			m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
 			m_pPopWnd->InitWindow();
 			m_pPopWnd->CenterWindow();
-		//	m_pPopWnd.ShowModal(true);
-			//::PostMessage(this->GetHWND(), WM_ITEMACTIVE, psender, 0);
 			m_pPopWnd->ShowWindow(true);
 			PopWndIsShowing = true;
 			return ;
@@ -667,8 +596,8 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect()
 				{
 					string tname    = vecTreeNode[j]->GetName().GetStringUtf8();
 					m_iCurDBIndex   = i;
-					ShowTable(tname,m_iCurDBIndex);
-					showDesign(tname,m_iCurDBIndex);
+					ShowTable(tname, m_iCurDBIndex);
+					showDesign(tname, m_iCurDBIndex);
 
 					if (m_vDesignListHeader.empty())
 					{
@@ -684,14 +613,14 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect()
 void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 {
 	CDuiString name = msg.pSender->GetName();
-	
-	if (msg.pSender == m_pList || msg.pSender == m_pSqlList)
+
+	if (msg.pSender == m_pList || msg.pSender == m_pSqlList)  
 	{
 		for (size_t i = 0; i < m_vCurListTextElem.size(); i++)
 		{
-			if ( m_vCurListTextElem[i]->IsSelected() )
+			if ( m_vCurListTextElem[i]->IsSelected() )  //psender 并不是 m_vCurListTextElem[i]
 			{
-				m_vCurListTextElem[i]->Select(true);
+				m_vCurListTextElem[i]->Select(true);    
 				if (true == PopWndIsShowing)
 				{
 					m_pCurListTextElem = m_vCurListTextElem[i];
@@ -738,7 +667,7 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 			m_vSqlListTextElem[i]->Select(false);
 		}
 	}
-	
+
 	for (size_t i = 0; i < m_vCurListTextElem.size(); i++)
 	{
 		if (msg.pSender == m_vCurListTextElem[i] )
@@ -793,22 +722,21 @@ void CDuiFrameWnd::OnClickTabSwitch(TNotifyUI& msg)
 	}
 }
 
-void CDuiFrameWnd::ShowTable(string TabName,int DBIndex)
+void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList, vector<CListHeaderItemUI* >& vCurListHeader, vector<CListTextElementUI*>& vCurTextElem)
 {
 	if (DBIndex < 0 )
 	{
 		return ;
 	}
 
-	m_pList->RemoveAll();
-	for (size_t i = 0; i < m_vCurListItem.size(); i++)
-		m_pList->Remove(m_vCurListItem[i]);
-	m_vCurListTextElem.clear();
-	m_vCurListItem.clear();
+	pList->RemoveAll();
+	for (size_t i = 0; i < vCurListHeader.size(); i++)
+		pList->Remove(vCurListHeader[i]);
+	vCurTextElem.clear();
+	vCurListHeader.clear();
 
 	try
 	{
-		string			sql		=	string("select * from ")+TabName;
 		CppSQLite3Query query	=	m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
 		int				col		=	query.numFields();
 		vector<int >				vTextLen(col,0);
@@ -832,7 +760,7 @@ void CDuiFrameWnd::ShowTable(string TabName,int DBIndex)
 			//获取字体的宽度和高度
 			HDC hDC = ::GetDC(this->m_hWnd);
 			SIZE sz;
-			::GetTextExtentPoint32(hDC, Cstr, Cstr.GetLength(),&sz);
+			::GetTextExtentPoint32(hDC, Cstr, Cstr.GetLength(), &sz);
 			::ReleaseDC(this->m_hWnd, hDC);
 			int x = sz.cx;
 
@@ -847,18 +775,18 @@ void CDuiFrameWnd::ShowTable(string TabName,int DBIndex)
 			pListHItem->SetAttribute(L"sepimage",L"resource/list_header_sep.png");
 			pListHItem->SetAttribute(L"sepwidth",L"1");
 
-			m_pList->Add(pListHItem);
+			pList->Add(pListHItem);
 
-			m_vCurListItem.push_back(pListHItem);
+			vCurListHeader.push_back(pListHItem);
 		}
 
-		m_pList->NeedParentUpdate();
+		pList->NeedParentUpdate();
 		query = m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
 
 		while(!query.eof())
 		{
 			CListTextElementUI* pListElement = new CListTextElementUI;
-			m_pList->Add(pListElement);
+			pList->Add(pListElement);
 
 			int col = query.numFields();
 			for(int i=0;i<col;i++)
@@ -870,26 +798,32 @@ void CDuiFrameWnd::ShowTable(string TabName,int DBIndex)
 				pListElement->SetText(i,LPCTSTR(Utf82Unicode(str)));
 				pListElement->SetAttribute(L"wordbreak",L"true");
 			}
-			m_vCurListTextElem.push_back(pListElement);
+			vCurTextElem.push_back(pListElement);
 			query.nextRow();
 		}
 		query.finalize();
 		for(int i=0;i<col;i++)
 		{
-			vHeadItem[i]->SetFixedWidth(vTextLen[i]+10);
+			vHeadItem[i]->SetFixedWidth(vTextLen[i] + 10);
 		}
 	}
 	catch(CppSQLite3Exception e)
 	{
-		MessageBoxA(NULL,e.errorMessage(),"Error",MB_OK);
+		MessageBoxA(NULL, e.errorMessage(), "Error", MB_OK);
 	}
+}
+
+void CDuiFrameWnd::ShowTable(string TabName,int DBIndex)
+{
+	string sql = string("select * from ") + TabName;
+	ShowList(sql,DBIndex,m_pList, m_vCurListItem, m_vCurListTextElem);
 }
 
 void CDuiFrameWnd::Notify(TNotifyUI& msg)
 {
-
 	if ( msg.sType == _T("itemactivate") )
 	{
+		CDuiString name = msg.pSender->GetText();
 		OnListTextElemActive(msg);
 	}
 	else if (msg.sType == _T("itemclick") || msg.sType == _T("itemselect"))
@@ -898,15 +832,7 @@ void CDuiFrameWnd::Notify(TNotifyUI& msg)
 		{
 			OnTreeNodeClickOrSelect();
 		}
-		/*else if (msg.pSender == m_pList || msg.pSender == m_pSqlList || 
-			find(m_vCurListTextElem.begin(),m_vCurListTextElem.end(),msg.pSender) != m_vCurListTextElem.end()  ||
-			find(m_vSqlListTextElem.begin(),m_vSqlListTextElem.end(),msg.pSender) != m_vSqlListTextElem.end()
-			)
-		*/
-		
-			updatePopWnd(msg);
-		
-			
+		updatePopWnd(msg);
 	}
 	else if (msg.sType == _T("click"))  //响应按钮的点击
 	{
@@ -916,7 +842,7 @@ void CDuiFrameWnd::Notify(TNotifyUI& msg)
 		}
 		else if (msg.pSender == m_btnSql)
 		{
-			executeSQL(m_pSqlEdit->GetSelText().GetStringUtf8(),m_iCurDBIndex);
+			executeSQL(m_pSqlEdit->GetSelText().GetStringUtf8(), m_iCurDBIndex);
 		}
 		else if (msg.pSender == m_btnCloseFile)
 		{
@@ -930,7 +856,7 @@ void CDuiFrameWnd::Notify(TNotifyUI& msg)
 		{
 			if (m_pCurTreeNode)
 			{
-				ShowTable(m_pCurTreeNode->GetItemButton()->GetText().GetStringA(),m_iCurDBIndex);
+				ShowTable(m_pCurTreeNode->GetItemButton()->GetText().GetStringA(), m_iCurDBIndex);
 			}
 		}
 	}
