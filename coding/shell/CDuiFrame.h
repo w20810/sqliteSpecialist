@@ -30,7 +30,7 @@ public :
 
 	void OnListTextElemActive(TNotifyUI& msg);
 	void OnClickOpenFileBtn();
-	void OnTreeNodeClickOrSelect();
+	void OnTreeNodeClickOrSelect(TNotifyUI& msg);
 	void OnClickTabSwitch(TNotifyUI& msg);
 	void updatePopWnd(TNotifyUI& msg);
 
@@ -52,7 +52,7 @@ private :
 	 vector<vector<char*>* >			m_vvTableName;   //记录各个数据库的表名
 
 	 CTreeViewUI*						m_pTreeView;    //一个树视图
-	 vector<vector<CTreeNodeUI*>*>		m_vvTreeNode;   //记录各个树的节点,每颗树的0号节点为根节点，根节点表示数据库
+	 vector<CTreeNodeUI*>				m_vTreeRootNode;//记录代表各个数据库的节点
 
 	 CRichEditUI*						m_pSqlEdit;
 	 CButtonUI*							m_btnSql;

@@ -150,7 +150,7 @@ void CDuiFrameWnd::loadPowerWordDB()
 	m_iCurDBIndex	= 0 ;
 	loadDB(GetDbPath(),0);
 	m_vDBPath.push_back(LPCTSTR(Utf82Unicode(GetDbPath())));
-	(*m_vvTreeNode[m_iCurDBIndex])[0]->Select(true);
+	m_vTreeRootNode[m_iCurDBIndex]->Select(true);  
 	m_pDBPathLabel->SetText(m_vDBPath[m_iCurDBIndex]);
 }
 
@@ -226,10 +226,10 @@ void CDuiFrameWnd::loadDB(char* PathName, int DBIndex)
 
 void CDuiFrameWnd::AddTable(int DBIndex)
 {
-	m_vvTreeNode.push_back(new vector<CTreeNodeUI*>);
-	m_vvTreeNode[DBIndex]->push_back(new  CTreeNodeUI());
+	
+	CTreeNodeUI* pHeadNode = new CTreeNodeUI();
+	m_vTreeRootNode.push_back(pHeadNode);
 
-	CTreeNodeUI* pHeadNode = (*m_vvTreeNode[DBIndex])[0];				//头结点，代表数据库
 	pHeadNode->SetName(L"DataBaseNode");
 	pHeadNode->SetAttribute(L"menu",L"true");
 	pHeadNode->SetItemText(LPCTSTR(Utf82Unicode(m_vNameOfDB[DBIndex].c_str())));
@@ -243,6 +243,7 @@ void CDuiFrameWnd::AddTable(int DBIndex)
 	pHeadNode->GetFolderButton()->SetAttribute(L"selectedimage",L"file='resource/treeview_a.png' source='0,0,16,16'");
 	pHeadNode->GetFolderButton()->SetAttribute(L"selectedhotimage",L" file='resource/treeview_a.png' source='16,0,32,16' ");
 	m_pTreeView->Add(pHeadNode);
+	pHeadNode->SetTreeView(m_pTreeView);
 	for (size_t i = 0; i < m_vvTableName[DBIndex]->size(); i++)
 	{
 		CTreeNodeUI* pTreeNodeElement = new CTreeNodeUI(pHeadNode);
@@ -260,8 +261,6 @@ void CDuiFrameWnd::AddTable(int DBIndex)
 			pTreeNodeElement->SetBkColor(0X22110022);
 
 		pHeadNode->Add(pTreeNodeElement);
-
-		m_vvTreeNode[DBIndex]->push_back(pTreeNodeElement);
 	}
 }
 
@@ -325,14 +324,9 @@ void CDuiFrameWnd::refreshDB()
 		return ;
 	}
 
-	vector<CTreeNodeUI*> vCurTreeNode = (*m_vvTreeNode[m_iCurDBIndex]) ;
-	for (size_t i = 1; i <vCurTreeNode.size(); ++i)
+	while (m_vTreeRootNode[m_iCurDBIndex]->GetCountChild())  
 	{
-		vCurTreeNode[0]->Remove(vCurTreeNode[i]);
-	}
-	while ((*m_vvTreeNode[m_iCurDBIndex]).size()>1)
-	{
-		(*m_vvTreeNode[m_iCurDBIndex]).pop_back();
+		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
 	}
 	(*m_vvTableName[m_iCurDBIndex]).clear();
 
@@ -370,7 +364,7 @@ void CDuiFrameWnd::refreshDB()
 
 	for (size_t i = 0; i < m_vvTableName[m_iCurDBIndex]->size(); i++)
 	{
-		CTreeNodeUI* pTreeNodeElement = new CTreeNodeUI((*m_vvTreeNode[m_iCurDBIndex])[0]);
+		CTreeNodeUI* pTreeNodeElement = new CTreeNodeUI(m_vTreeRootNode[m_iCurDBIndex]);
 		pTreeNodeElement->SetName(LPCTSTR((*m_vvTableName[m_iCurDBIndex])[i]));
 		pTreeNodeElement->SetItemText(LPCTSTR((*m_vvTableName[m_iCurDBIndex])[i]));
 
@@ -380,16 +374,15 @@ void CDuiFrameWnd::refreshDB()
 
 		pTreeNodeElement->GetItemButton()->SetFont(4);
 		pTreeNodeElement->GetTreeNodeHoriznotal()->SetToolTip(LPCTSTR((*m_vvTableName[m_iCurDBIndex])[i]));
-		pTreeNodeElement->SetParentNode((*m_vvTreeNode[m_iCurDBIndex])[0]);
+		pTreeNodeElement->SetParentNode(m_vTreeRootNode[m_iCurDBIndex]);
 		if(i&1)
 			pTreeNodeElement->SetBkColor(0X11001100);
 		else
 			pTreeNodeElement->SetBkColor(0X22110022);
-		((*m_vvTreeNode[m_iCurDBIndex])[0])->Add(pTreeNodeElement);
+		m_vTreeRootNode[m_iCurDBIndex]->Add(pTreeNodeElement);
 
-		m_vvTreeNode[m_iCurDBIndex]->push_back(pTreeNodeElement);
 	}
-	(*m_vvTreeNode[m_iCurDBIndex])[0]->Select(true);
+	m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 }
 
 void CDuiFrameWnd::unloadDB()
@@ -412,16 +405,15 @@ void CDuiFrameWnd::unloadDB()
 	m_vCurListTextElem.clear();
 	m_vCurListItem.clear();
 
-	vector<CTreeNodeUI*> vCurTreeNode = (*m_vvTreeNode[m_iCurDBIndex]) ; 
-	for (size_t i = 1; i <vCurTreeNode.size(); ++i)
+	while (m_vTreeRootNode[m_iCurDBIndex]->GetCountChild())  
 	{
-		vCurTreeNode[0]->Remove(vCurTreeNode[i]);
+		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
 	}
-	m_pTreeView->Remove(vCurTreeNode[0]);
+	m_pTreeView->Remove(m_vTreeRootNode[m_iCurDBIndex]);
 
 	m_vNameOfDB.erase(std::find(m_vNameOfDB.begin(),m_vNameOfDB.end(),m_vNameOfDB[m_iCurDBIndex]));
 	m_vSqliteDB.erase(std::find(m_vSqliteDB.begin(),m_vSqliteDB.end(),m_vSqliteDB[m_iCurDBIndex]));
-	m_vvTreeNode.erase(std::find(m_vvTreeNode.begin(),m_vvTreeNode.end(),m_vvTreeNode[m_iCurDBIndex]));
+	m_vTreeRootNode.erase(std::find(m_vTreeRootNode.begin(),m_vTreeRootNode.end(),m_vTreeRootNode[m_iCurDBIndex])); 
 	m_vvTableName.erase(std::find(m_vvTableName.begin(),m_vvTableName.end(),m_vvTableName[m_iCurDBIndex]));
 	m_vDBPath.erase(std::find(m_vDBPath.begin(),m_vDBPath.end(),m_pDBPathLabel->GetText()));
 
@@ -447,12 +439,14 @@ void CDuiFrameWnd::unloadDB()
 		}
 		else
 		{
-			(*m_vvTreeNode[m_iCurDBIndex])[0]->Select(true);
+			m_vTreeRootNode[m_iCurDBIndex]->Select(true); 
 		}
 	}
 	else
 	{
-		(*m_vvTreeNode[--m_iCurDBIndex])[0]->Select(true);
+		m_iCurDBIndex = -- m_iCurDBIndex;
+		int sz = m_vTreeRootNode.size();
+		m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 	}
 
 	m_pPopWnd->ShowWindow(false);
@@ -542,7 +536,8 @@ void CDuiFrameWnd::OnClickOpenFileBtn()
 		m_iCurDBIndex = m_vSqliteDB.size() - 1;
 		loadDB(path,m_iCurDBIndex);
 		m_vDBPath.push_back( LPCTSTR(Utf82Unicode(path)));
-		(*m_vvTreeNode[m_iCurDBIndex])[0]->Select(true);  //选中打开的数据库
+
+		m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 
 		m_pList->RemoveAll();
 		for (vector<CListHeaderItemUI*>::iterator ite = m_vCurListItem.begin(); ite != m_vCurListItem.end(); ++ite)
@@ -561,50 +556,51 @@ void CDuiFrameWnd::OnClickOpenFileBtn()
 	}
 }
 
-void CDuiFrameWnd::OnTreeNodeClickOrSelect()
+void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 {
-	for (size_t i = 0; i < m_vvTreeNode.size(); i++)
+	int count = msg.wParam + 1;//触发事件的节点在treeView中的编号
+	for (size_t i = 0; i < m_vTreeRootNode.size(); i++)
 	{
-		vector<CTreeNodeUI*>& vecTreeNode = *m_vvTreeNode[i];
-		for (size_t j = 0; j < vecTreeNode.size(); j++)           
+		if (count > m_vTreeRootNode[i]->GetCountChild() + 1)
 		{
-			if (vecTreeNode[j]->IsSelected())
+			count -= (m_vTreeRootNode[i]->GetCountChild() + 1);
+		}
+		else
+		{
+			m_iCurDBIndex = i;
+			m_pDBPathLabel->SetText(m_vDBPath[i]);
+
+			if (count == 1)
 			{
-				m_pDBPathLabel->SetText(m_vDBPath[i]);
-
-				m_pCurTreeNode  = vecTreeNode[j];
-				if (j == 0)
+				m_pCurTreeNode = m_vTreeRootNode[i];
+				m_pDesignList->RemoveAll();
+				for (size_t i = 0; i < m_vDesignListHeader.size(); i++)
 				{
-					m_iCurDBIndex = i;
-
-					m_pDesignList->RemoveAll();
-					for (size_t i = 0; i < m_vDesignListHeader.size(); i++)
-					{
-						m_pDesignList->Remove(m_vDesignListHeader[i]);
-					}
-					m_vDesignListHeader.clear();
-
-					m_pList->RemoveAll();
-					for (size_t i = 0; i < m_vCurListItem.size(); ++i)
-					{
-						m_pList->Remove(m_vCurListItem[i]);
-					}
-					m_vCurListItem.clear();
-					m_vCurListTextElem.clear();
+					m_pDesignList->Remove(m_vDesignListHeader[i]);
 				}
-				else
+				m_vDesignListHeader.clear();
+
+				m_pList->RemoveAll();
+				for (size_t i = 0; i < m_vCurListItem.size(); ++i)
 				{
-					string tname    = vecTreeNode[j]->GetName().GetStringUtf8();
-					m_iCurDBIndex   = i;
-					ShowTable(tname, m_iCurDBIndex);
-					showDesign(tname, m_iCurDBIndex);
-
-					if (m_vDesignListHeader.empty())
-					{
-						addDesignListHeader();
-					}
-					break;
+					m_pList->Remove(m_vCurListItem[i]);
 				}
+				m_vCurListItem.clear();
+				m_vCurListTextElem.clear();
+			}
+			else
+			{
+				m_pCurTreeNode = m_vTreeRootNode[i]->GetChildNode(count - 2);
+				string name = m_pCurTreeNode->GetName().GetStringUtf8();
+				
+				ShowTable(name, m_iCurDBIndex);
+				showDesign(name, m_iCurDBIndex);
+
+				if (m_vDesignListHeader.empty())
+				{
+					addDesignListHeader();
+				}
+				break;
 			}
 		}
 	}
@@ -823,14 +819,13 @@ void CDuiFrameWnd::Notify(TNotifyUI& msg)
 {
 	if ( msg.sType == _T("itemactivate") )
 	{
-		CDuiString name = msg.pSender->GetText();
 		OnListTextElemActive(msg);
 	}
 	else if (msg.sType == _T("itemclick") || msg.sType == _T("itemselect"))
 	{
 		if (msg.pSender == m_pTreeView)
 		{
-			OnTreeNodeClickOrSelect();
+			OnTreeNodeClickOrSelect(msg);
 		}
 		updatePopWnd(msg);
 	}
