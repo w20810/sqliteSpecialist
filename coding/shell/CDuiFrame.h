@@ -72,5 +72,5 @@ private :
 	 CLabelUI*							m_pDBPathLabel;
 private:
 	 PopWnd*							m_pPopWnd;       //指向子窗口
-	 bool								PopWndIsShowing;
+	 bool								m_bPopWndIsShowing;
 }; 

@@ -450,6 +450,7 @@ void CDuiFrameWnd::unloadDB()
 	}
 
 	m_pPopWnd->ShowWindow(false);
+	m_bPopWndIsShowing =  false;
 }
 
 void CDuiFrameWnd::showDesign(string tabName, int DBIndex)
@@ -484,7 +485,7 @@ void CDuiFrameWnd::OnListTextElemActive(TNotifyUI& msg)
 			m_pPopWnd->InitWindow();
 			m_pPopWnd->CenterWindow();
 			m_pPopWnd->ShowWindow(true);
-			PopWndIsShowing = true;
+			m_bPopWndIsShowing = true;
 			return ;
 		}
 	}
@@ -497,7 +498,7 @@ void CDuiFrameWnd::OnListTextElemActive(TNotifyUI& msg)
 			m_pPopWnd->InitWindow();
 			m_pPopWnd->CenterWindow();
 			m_pPopWnd->ShowWindow(true);
-			PopWndIsShowing = true;
+			m_bPopWndIsShowing = true;
 			return ;
 		}
 	}
@@ -558,6 +559,7 @@ void CDuiFrameWnd::OnClickOpenFileBtn()
 
 void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 {
+	m_pPopWnd->ClearFrame();
 	int count = msg.wParam + 1;//触发事件的节点在treeView中的编号
 	for (size_t i = 0; i < m_vTreeRootNode.size(); i++)
 	{
@@ -617,14 +619,14 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 			if ( m_vCurListTextElem[i]->IsSelected() )  //psender 并不是 m_vCurListTextElem[i]
 			{
 				m_vCurListTextElem[i]->Select(true);    
-				if (true == PopWndIsShowing)
+				if (true == m_bPopWndIsShowing)
 				{
 					m_pCurListTextElem = m_vCurListTextElem[i];
 					m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
 
 					m_pPopWnd->InitWindow();
 					m_pPopWnd->ShowWindow(true);
-					PopWndIsShowing = true;
+					m_bPopWndIsShowing = true;
 					return ;
 				}
 			}
@@ -634,13 +636,13 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 			if ( m_vSqlListTextElem[i]->IsSelected() )
 			{
 				m_vSqlListTextElem[i]->Select(true);
-				if (true == PopWndIsShowing)
+				if (true == m_bPopWndIsShowing)
 				{
 					m_pCurListTextElem = m_vSqlListTextElem[i];
 
 					m_pPopWnd->InitWindow();
 					m_pPopWnd->ShowWindow(true);
-					PopWndIsShowing = true;
+					m_bPopWndIsShowing = true;
 
 					return ;
 				}
@@ -669,14 +671,14 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 		if (msg.pSender == m_vCurListTextElem[i] )
 		{
 			m_vCurListTextElem[i]->Select(true);
-			if (true == PopWndIsShowing)
+			if (true == m_bPopWndIsShowing)
 			{
 				m_pCurListTextElem = m_vCurListTextElem[i];
 				m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
 
 				m_pPopWnd->InitWindow();
 				m_pPopWnd->ShowWindow(true);
-				PopWndIsShowing = true;
+				m_bPopWndIsShowing = true;
 				return ;
 			}
 		}
@@ -686,13 +688,13 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 		if (msg.pSender == m_vSqlListTextElem[i] )
 		{
 			m_vSqlListTextElem[i]->Select(true);
-			if (true == PopWndIsShowing)
+			if (true == m_bPopWndIsShowing)
 			{
 				m_pCurListTextElem = m_vSqlListTextElem[i];
 
 				m_pPopWnd->InitWindow();
 				m_pPopWnd->ShowWindow(true);
-				PopWndIsShowing = true;
+				m_bPopWndIsShowing = true;
 
 				return ;
 			}

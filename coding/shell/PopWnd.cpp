@@ -523,7 +523,7 @@ void PopWnd::Notify(TNotifyUI& msg)
 		else if (msg.pSender->GetName() == _T("closebtn") )
 		{
 			this->ShowWindow(false);
-			m_pParentWnd->PopWndIsShowing = false;
+			m_pParentWnd->m_bPopWndIsShowing = false;
 			return; 
 		}
 	}
