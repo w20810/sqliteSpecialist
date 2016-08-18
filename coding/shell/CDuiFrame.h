@@ -35,6 +35,8 @@ public :
 	void updatePopWnd(TNotifyUI& msg);
 
 	void addDesignListHeader();
+	void addTableNode(int DBIndex);
+	void initDBNode(CTreeNodeUI* pHeadNode, string DBName);
 private :
 
 	 CListUI*							m_pList;

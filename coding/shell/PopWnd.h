@@ -2,6 +2,7 @@
 
 class PopWnd : public WindowImplBase
 {
+
 public:
 	virtual LPCTSTR GetWindowClassName()const ;
 	virtual CDuiString GetSkinFile() ;
@@ -20,9 +21,8 @@ public:
 	void OnAddBtn();
 	void OnOkBtn();
 	void loadFrame();
-	void DeletAndSelectOtherTextItem(CListUI* pFrameList,vector<CListTextElementUI*>& vFrameTextElem,CListTextElementUI* &pDeleteTextElem);
-
 	void setParentWnd(CDuiFrameWnd* parentWnd);
+	void DeletAndSelectOtherTextItem(CListUI* pFrameList,vector<CListTextElementUI*>& vFrameTextElem,CListTextElementUI* &pDeleteTextElem);
 
 private:
 	vector<CLabelUI* >			m_vPropertyName; //表的所有属性的名字

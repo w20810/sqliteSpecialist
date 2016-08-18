@@ -214,7 +214,6 @@ void PopWnd::OnNextBtn()
 			break;
 		}
 	}
-	
 }
 
 void PopWnd::OnFirstBtn()
@@ -316,7 +315,6 @@ void PopWnd::OkAdd()
 	{
 		CDuiString			strTableName	=	m_pParentWnd->m_CDuiStrActiveListItemTableName;
 		CDuiString			sql				=	CDuiString(L"insert into ") + strTableName + GetValuesFormat(m_vData.size());
-		int					a				=	1;
 		CppSQLite3Statement stm				=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->compileStatement(sql.GetStringA().c_str());
 
 		sql				=	CDuiString(L"select * from ") + strTableName;

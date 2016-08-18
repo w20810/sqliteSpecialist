@@ -12,7 +12,7 @@ char* TCHAR2char(const TCHAR* tchStr)
 	char* chRtn = new char[iLen+1] ;
 	wcstombs(chRtn,tchStr,iLen+1);//转换成功返回为非负值 
 	return chRtn; 
-} 
+}
 
 TCHAR *char2tchar(char *str)
 {
@@ -70,6 +70,7 @@ CDuiString CDuiFrameWnd::GetSkinFolder()
 {  
 	return MAKEINTRESOURCE(IDR_ZIPRES1);  
 }
+
  UILIB_RESOURCETYPE CDuiFrameWnd::GetResourceType() const  
 {  
 	return UILIB_ZIPRESOURCE;   
@@ -101,6 +102,24 @@ CDuiString getTableNameFromSQL(const char* sql)//select  适用于简单的语句
 		}
 	}
 	return LPCTSTR(Utf82Unicode(tableName.c_str()));
+}
+
+void CDuiFrameWnd::initDBNode(CTreeNodeUI* pHeadNode, string DBName)
+{
+	pHeadNode->SetName(L"DataBaseNode");
+	pHeadNode->SetAttribute(L"menu",L"true");
+	pHeadNode->SetItemText(LPCTSTR(Utf82Unicode(DBName.c_str())));
+	pHeadNode->GetItemButton()->SetFont(4);
+	pHeadNode->SetBkColor(0X44444000);
+	pHeadNode->GetCheckBox()->SetAttribute(L"width",L"15");
+	pHeadNode->GetCheckBox()->SetAttribute(L"height",L"15");
+	pHeadNode->GetCheckBox()->SetAttribute(L"normalimage",L"resource/db.png");
+	pHeadNode->GetFolderButton()->SetAttribute(L"normalimage",L" file='resource/treeview_b.png' source='0,0,16,16' ");
+	pHeadNode->GetFolderButton()->SetAttribute(L"hotimage",L" file='resource/treeview_b.png' source='16,0,32,16' ");
+	pHeadNode->GetFolderButton()->SetAttribute(L"selectedimage",L"file='resource/treeview_a.png' source='0,0,16,16'");
+	pHeadNode->GetFolderButton()->SetAttribute(L"selectedhotimage",L" file='resource/treeview_a.png' source='16,0,32,16' ");
+	m_pTreeView->Add(pHeadNode);
+	pHeadNode->SetTreeView(m_pTreeView);
 }
 
 char* CDuiFrameWnd::GetDbPath()
@@ -138,7 +157,7 @@ void CDuiFrameWnd::addDesignListHeader()
 		pListHeader->SetSepWidth(1);
 
 		m_pDesignList->Add(pListHeader);
-		
+
 		m_vDesignListHeader.push_back(pListHeader);
 	}
 }
@@ -146,7 +165,7 @@ void CDuiFrameWnd::addDesignListHeader()
 void CDuiFrameWnd::loadPowerWordDB()
 {
 	m_vSqliteDB.push_back(new CppSQLite3DB());
-	m_iCurDBIndex	= 0 ;
+	m_iCurDBIndex	=	m_iCurDBIndex + 1;
 	loadDB(GetDbPath(), 0, "PowerWord.db");
 	m_vDBPath.push_back(LPCTSTR(Utf82Unicode(GetDbPath())));
 	m_vTreeRootNode[m_iCurDBIndex]->Select(true);  
@@ -179,6 +198,7 @@ void CDuiFrameWnd::InitWindow()
 	loadPowerWordDB();
 	addDesignListHeader();
 }
+
 void CDuiFrameWnd::loadDB(char* PathName, int DBIndex, string DBName)
 {
 	//获取密码
@@ -223,44 +243,12 @@ void CDuiFrameWnd::loadDB(char* PathName, int DBIndex, string DBName)
 	AddTable(DBIndex,DBName);
 }
 
-void CDuiFrameWnd::AddTable(int DBIndex,string DBName)
+void CDuiFrameWnd::AddTable(int DBIndex, string DBName)
 {
-	
 	CTreeNodeUI* pHeadNode = new CTreeNodeUI();
 	m_vTreeRootNode.push_back(pHeadNode);
-
-	pHeadNode->SetName(L"DataBaseNode");
-	pHeadNode->SetAttribute(L"menu",L"true");
-	pHeadNode->SetItemText(LPCTSTR(Utf82Unicode(DBName.c_str())));
-	pHeadNode->GetItemButton()->SetFont(4);
-	pHeadNode->SetBkColor(0X44444000);
-	pHeadNode->GetCheckBox()->SetAttribute(L"width",L"15");
-	pHeadNode->GetCheckBox()->SetAttribute(L"height",L"15");
-	pHeadNode->GetCheckBox()->SetAttribute(L"normalimage",L"resource/db.png");
-	pHeadNode->GetFolderButton()->SetAttribute(L"normalimage",L" file='resource/treeview_b.png' source='0,0,16,16' ");
-	pHeadNode->GetFolderButton()->SetAttribute(L"hotimage",L" file='resource/treeview_b.png' source='16,0,32,16' ");
-	pHeadNode->GetFolderButton()->SetAttribute(L"selectedimage",L"file='resource/treeview_a.png' source='0,0,16,16'");
-	pHeadNode->GetFolderButton()->SetAttribute(L"selectedhotimage",L" file='resource/treeview_a.png' source='16,0,32,16' ");
-	m_pTreeView->Add(pHeadNode);
-	pHeadNode->SetTreeView(m_pTreeView);
-	for (size_t i = 0; i < m_vvTableName[DBIndex]->size(); i++)
-	{
-		CTreeNodeUI* pTreeNodeElement = new CTreeNodeUI(pHeadNode);
-		pTreeNodeElement->SetName(LPCTSTR((*m_vvTableName[DBIndex])[i]));
-		pTreeNodeElement->SetItemText(LPCTSTR((*m_vvTableName[DBIndex])[i]));
-		pTreeNodeElement->GetCheckBox()->SetAttribute(L"width",L"15");
-		pTreeNodeElement->GetCheckBox()->SetAttribute(L"height",L"15");
-		pTreeNodeElement->GetCheckBox()->SetAttribute(L"normalimage",L"resource/tables.png");
-		pTreeNodeElement->GetItemButton()->SetFont(4);
-		pTreeNodeElement->GetTreeNodeHoriznotal()->SetToolTip(LPCTSTR((*m_vvTableName[DBIndex])[i]));
-		pTreeNodeElement->SetParentNode(pHeadNode);
-		if(i&1)
-			pTreeNodeElement->SetBkColor(0X11001100);
-		else
-			pTreeNodeElement->SetBkColor(0X22110022);
-
-		pHeadNode->Add(pTreeNodeElement);
-	}
+	initDBNode(pHeadNode, DBName);
+	addTableNode(DBIndex);
 }
 
 void CDuiFrameWnd::executeSQL(string sql, int DBIndex)
@@ -312,9 +300,34 @@ void CDuiFrameWnd::executeSQL(string sql, int DBIndex)
 		MessageBoxA(NULL, e.errorMessage(), "Error", MB_OK);
 		return ;
 	}
-
 	ShowList(sql,DBIndex, m_pSqlList,m_vSqlListHeader, m_vSqlListTextElem);
 }
+
+void CDuiFrameWnd::addTableNode(int DBIndex)
+{
+	for (size_t i = 0; i < m_vvTableName[DBIndex]->size(); i++)
+	{
+		CTreeNodeUI* pTreeNodeElement = new CTreeNodeUI(m_vTreeRootNode[DBIndex]);
+		pTreeNodeElement->SetName(LPCTSTR((*m_vvTableName[DBIndex])[i]));
+		pTreeNodeElement->SetItemText(LPCTSTR((*m_vvTableName[DBIndex])[i]));
+		pTreeNodeElement->GetCheckBox()->SetAttribute(L"width",L"15");
+		pTreeNodeElement->GetCheckBox()->SetAttribute(L"height",L"15");
+		pTreeNodeElement->GetCheckBox()->SetAttribute(L"normalimage",L"resource/tables.png");
+		pTreeNodeElement->GetItemButton()->SetFont(4);
+		pTreeNodeElement->GetTreeNodeHoriznotal()->SetToolTip(LPCTSTR((*m_vvTableName[DBIndex])[i]));
+		pTreeNodeElement->SetParentNode(m_vTreeRootNode[DBIndex]);
+		if(i & 1)
+		{
+			pTreeNodeElement->SetBkColor(0X11001100);
+		}
+		else
+		{
+			pTreeNodeElement->SetBkColor(0X22110022);
+		}
+		m_vTreeRootNode[DBIndex]->Add(pTreeNodeElement);
+	}
+}
+
 void CDuiFrameWnd::refreshDB()
 {
 	if (m_iCurDBIndex < 0)
@@ -361,25 +374,7 @@ void CDuiFrameWnd::refreshDB()
 		}
 	}
 
-	for (size_t i = 0; i < m_vvTableName[m_iCurDBIndex]->size(); i++)
-	{
-		CTreeNodeUI* pTreeNodeElement = new CTreeNodeUI(m_vTreeRootNode[m_iCurDBIndex]);
-		pTreeNodeElement->SetName(LPCTSTR((*m_vvTableName[m_iCurDBIndex])[i]));
-		pTreeNodeElement->SetItemText(LPCTSTR((*m_vvTableName[m_iCurDBIndex])[i]));
-
-		pTreeNodeElement->GetCheckBox()->SetAttribute(L"width",L"15");
-		pTreeNodeElement->GetCheckBox()->SetAttribute(L"height",L"15");
-		pTreeNodeElement->GetCheckBox()->SetAttribute(L"normalimage",L"resource/tables.png");
-
-		pTreeNodeElement->GetItemButton()->SetFont(4);
-		pTreeNodeElement->GetTreeNodeHoriznotal()->SetToolTip(LPCTSTR((*m_vvTableName[m_iCurDBIndex])[i]));
-		pTreeNodeElement->SetParentNode(m_vTreeRootNode[m_iCurDBIndex]);
-		if(i&1)
-			pTreeNodeElement->SetBkColor(0X11001100);
-		else
-			pTreeNodeElement->SetBkColor(0X22110022);
-		m_vTreeRootNode[m_iCurDBIndex]->Add(pTreeNodeElement);
-	}
+	addTableNode(m_iCurDBIndex);
 	m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 }
 
@@ -445,7 +440,6 @@ void CDuiFrameWnd::unloadDB()
 		int sz = m_vTreeRootNode.size();
 		m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 	}
-
 	m_pPopWnd->ShowWindow(false);
 	m_bPopWndIsShowing =  false;
 }
@@ -491,7 +485,6 @@ void CDuiFrameWnd::OnListTextElemActive(TNotifyUI& msg)
 		if (msg.pSender == m_vSqlListTextElem[i])
 		{
 			m_pCurListTextElem = m_vSqlListTextElem[i];
-
 			m_pPopWnd->InitWindow();
 			m_pPopWnd->CenterWindow();
 			m_pPopWnd->ShowWindow(true);
@@ -619,8 +612,7 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 				{
 					m_pCurListTextElem = m_vCurListTextElem[i];
 					m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
-
-					m_pPopWnd->InitWindow();
+					m_pPopWnd->InitWindow(); 
 					m_pPopWnd->ShowWindow(true);
 					m_bPopWndIsShowing = true;
 					return ;
@@ -631,11 +623,9 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 		{
 			if ( m_vSqlListTextElem[i]->IsSelected() )
 			{
-				m_vSqlListTextElem[i]->Select(true);
 				if (true == m_bPopWndIsShowing)
 				{
 					m_pCurListTextElem = m_vSqlListTextElem[i];
-
 					m_pPopWnd->InitWindow();
 					m_pPopWnd->ShowWindow(true);
 					m_bPopWndIsShowing = true;
@@ -664,6 +654,7 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 
 	for (size_t i = 0; i < m_vCurListTextElem.size(); i++)
 	{
+		size_t SZ = m_vCurListTextElem.size();
 		if (msg.pSender == m_vCurListTextElem[i] )
 		{
 			m_vCurListTextElem[i]->Select(true);
