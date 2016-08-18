@@ -146,9 +146,8 @@ void CDuiFrameWnd::addDesignListHeader()
 void CDuiFrameWnd::loadPowerWordDB()
 {
 	m_vSqliteDB.push_back(new CppSQLite3DB());
-	m_vNameOfDB.push_back(string("Powerword.db"));
 	m_iCurDBIndex	= 0 ;
-	loadDB(GetDbPath(),0);
+	loadDB(GetDbPath(), 0, "PowerWord.db");
 	m_vDBPath.push_back(LPCTSTR(Utf82Unicode(GetDbPath())));
 	m_vTreeRootNode[m_iCurDBIndex]->Select(true);  
 	m_pDBPathLabel->SetText(m_vDBPath[m_iCurDBIndex]);
@@ -180,7 +179,7 @@ void CDuiFrameWnd::InitWindow()
 	loadPowerWordDB();
 	addDesignListHeader();
 }
-void CDuiFrameWnd::loadDB(char* PathName, int DBIndex)
+void CDuiFrameWnd::loadDB(char* PathName, int DBIndex, string DBName)
 {
 	//»ñÈ¡ÃÜÂë
 	std::wstring strhdid;
@@ -221,10 +220,10 @@ void CDuiFrameWnd::loadDB(char* PathName, int DBIndex)
 			query.finalize();
 		}
 	}
-	AddTable(DBIndex);
+	AddTable(DBIndex,DBName);
 }
 
-void CDuiFrameWnd::AddTable(int DBIndex)
+void CDuiFrameWnd::AddTable(int DBIndex,string DBName)
 {
 	
 	CTreeNodeUI* pHeadNode = new CTreeNodeUI();
@@ -232,7 +231,7 @@ void CDuiFrameWnd::AddTable(int DBIndex)
 
 	pHeadNode->SetName(L"DataBaseNode");
 	pHeadNode->SetAttribute(L"menu",L"true");
-	pHeadNode->SetItemText(LPCTSTR(Utf82Unicode(m_vNameOfDB[DBIndex].c_str())));
+	pHeadNode->SetItemText(LPCTSTR(Utf82Unicode(DBName.c_str())));
 	pHeadNode->GetItemButton()->SetFont(4);
 	pHeadNode->SetBkColor(0X44444000);
 	pHeadNode->GetCheckBox()->SetAttribute(L"width",L"15");
@@ -380,7 +379,6 @@ void CDuiFrameWnd::refreshDB()
 		else
 			pTreeNodeElement->SetBkColor(0X22110022);
 		m_vTreeRootNode[m_iCurDBIndex]->Add(pTreeNodeElement);
-
 	}
 	m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 }
@@ -411,7 +409,6 @@ void CDuiFrameWnd::unloadDB()
 	}
 	m_pTreeView->Remove(m_vTreeRootNode[m_iCurDBIndex]);
 
-	m_vNameOfDB.erase(std::find(m_vNameOfDB.begin(),m_vNameOfDB.end(),m_vNameOfDB[m_iCurDBIndex]));
 	m_vSqliteDB.erase(std::find(m_vSqliteDB.begin(),m_vSqliteDB.end(),m_vSqliteDB[m_iCurDBIndex]));
 	m_vTreeRootNode.erase(std::find(m_vTreeRootNode.begin(),m_vTreeRootNode.end(),m_vTreeRootNode[m_iCurDBIndex])); 
 	m_vvTableName.erase(std::find(m_vvTableName.begin(),m_vvTableName.end(),m_vvTableName[m_iCurDBIndex]));
@@ -531,11 +528,10 @@ void CDuiFrameWnd::OnClickOpenFileBtn()
 			addName.push_back(s[i]);
 		}
 		addName = string(addName.rbegin(),addName.rend());
-		m_vNameOfDB.push_back(addName);
 
 		m_vSqliteDB.push_back(new CppSQLite3DB());
 		m_iCurDBIndex = m_vSqliteDB.size() - 1;
-		loadDB(path,m_iCurDBIndex);
+		loadDB(path, m_iCurDBIndex, addName);
 		m_vDBPath.push_back( LPCTSTR(Utf82Unicode(path)));
 
 		m_vTreeRootNode[m_iCurDBIndex]->Select(true);
@@ -602,8 +598,8 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 				{
 					addDesignListHeader();
 				}
-				break;
 			}
+			break;
 		}
 	}
 }

@@ -17,11 +17,11 @@ public :
 	//virtual LPCTSTR GetResourceID() const  ; 
 	//virtual UILIB_RESOURCETYPE GetResourceType() const ;
 	
-	void AddTable(int DbIndex);
+	void AddTable(int DbIndex,string DBName);
 	void ShowTable(string tabName,int DBIndex);
 	void ShowList(string sql,int DBIndex, CListUI* pList, vector<CListHeaderItemUI* >& vCurListHeader, vector<CListTextElementUI*>& vCurTextElem);
 	char* GetDbPath();
-	void loadDB(char *PathName,int DBIndex);
+	void loadDB(char *PathName, int DBIndex, string DBName);
 	void executeSQL(string sql,int DBIndex);
 	void showDesign(string tabName,int DBIndex);
 	void unloadDB();
@@ -46,7 +46,6 @@ private :
 	 CButtonUI*							m_btnRefreshDB;
 	 CButtonUI*							m_btnRefreshTable;
 
-	 vector<string>						m_vNameOfDB;     //保存多个数据库的名字
 	 int								m_iCurDBIndex;   //当前数据库的索引
 	 vector<CppSQLite3DB*>				m_vSqliteDB;     //保存多个数据库
 	 vector<vector<char*>* >			m_vvTableName;   //记录各个数据库的表名
