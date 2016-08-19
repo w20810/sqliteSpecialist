@@ -86,20 +86,21 @@ void PopWnd::ClearFrame()
 	m_vOriginalData.clear();
 }
 
-void PopWnd::DeletAndSelectOtherTextItem(CListUI* pFrameList, vector<CListTextElementUI*>& vFrameTextElem, CListTextElementUI* &pDeleteTextElem)
+void PopWnd::DeletAndSelectOtherTextItem(CListUI* pFrameList, CListTextElementUI* &pDeleteTextElem)
 {
 	CListTextElementUI*		pPreviousTextElem = NULL;
-	for (vector<CListTextElementUI*>::iterator ite =vFrameTextElem.begin(); ite != vFrameTextElem.end(); ++ite)
+	for (int i = 0; i < pFrameList->GetList()->GetCount(); ++i)
 	{
-		if (*ite == pDeleteTextElem)
+		CListTextElementUI* pListTextElem = static_cast<CListTextElementUI*>(pFrameList->GetList()->GetItemAt(i));
+		if (pListTextElem == pDeleteTextElem)
 		{
 			pFrameList->Remove(pDeleteTextElem);
 
-			if (ite == vFrameTextElem.begin())
+			if (0 == i)
 			{
-				if (ite + 1 != vFrameTextElem.end())
+				if (pFrameList->GetList()->GetCount() != 0)
 				{
-					CListTextElementUI* pNextTextElem = *(ite + 1) ;
+					CListTextElementUI* pNextTextElem = static_cast<CListTextElementUI*>(pFrameList->GetList()->GetItemAt(i));
 					pDeleteTextElem = pNextTextElem;
 					pNextTextElem->Select(true);
 
@@ -121,7 +122,7 @@ void PopWnd::DeletAndSelectOtherTextItem(CListUI* pFrameList, vector<CListTextEl
 			}
 			else
 			{
-				pPreviousTextElem = *(ite - 1) ;
+				pPreviousTextElem = static_cast<CListTextElementUI*>(pFrameList->GetList()->GetItemAt(i - 1));
 				pDeleteTextElem   = pPreviousTextElem;
 				pPreviousTextElem->Select(true);
 
@@ -131,7 +132,6 @@ void PopWnd::DeletAndSelectOtherTextItem(CListUI* pFrameList, vector<CListTextEl
 					m_vOriginalData[i]=m_vData[i]->GetText();
 				}
 			}
-			vFrameTextElem.erase(ite);
 			break;
 		}
 	}
@@ -139,21 +139,22 @@ void PopWnd::DeletAndSelectOtherTextItem(CListUI* pFrameList, vector<CListTextEl
 
 void PopWnd::OnPreviousBtn()
 {
-	vector<CListTextElementUI*> vFrameTextElem;
+	CContainerUI*	pContainerListTextElem = NULL;
 	CListTextElementUI* &pCurTextElem =  m_pParentWnd->m_pCurListTextElem;
 	if (m_pParentWnd->m_pList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vCurListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pList->GetList();
 	}
 	else if (m_pParentWnd->m_pSqlList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vSqlListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pSqlList->GetList();
 	}
-	for (vector<CListTextElementUI*>::iterator ite = vFrameTextElem.begin(); ite != vFrameTextElem.end(); ++ite)
+	for (int i = 0; i < pContainerListTextElem->GetCount(); ++i)
 	{
-		if (*ite == pCurTextElem)
+		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(pContainerListTextElem->GetItemAt(i));
+		if (pListTextElem == pCurTextElem)
 		{
-			if (ite == vFrameTextElem.begin())
+			if (0 == i)
 			{
 				return ;
 			}
@@ -161,7 +162,7 @@ void PopWnd::OnPreviousBtn()
 			{
 				pCurTextElem->Select(false);
 
-				CListTextElementUI* pPreviousTextElem = *(ite - 1);
+				CListTextElementUI* pPreviousTextElem = static_cast<CListTextElementUI*>(pContainerListTextElem->GetItemAt(i - 1));
 				pCurTextElem = pPreviousTextElem;
 				pPreviousTextElem->Select(true);
 
@@ -178,98 +179,95 @@ void PopWnd::OnPreviousBtn()
 
 void PopWnd::OnNextBtn()
 {
-	vector<CListTextElementUI*> vFrameTextElem;
-	CListTextElementUI* &pCurTextElem =  m_pParentWnd->m_pCurListTextElem;
+	CContainerUI*	pContainerListTextElem = NULL;
 	if (m_pParentWnd->m_pList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vCurListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pList->GetList();
 	}
 	else if (m_pParentWnd->m_pSqlList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vSqlListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pSqlList->GetList();
 	}
-
-	for (vector<CListTextElementUI*>::iterator ite = vFrameTextElem.begin(); ite != vFrameTextElem.end(); ++ite)
+	for (int i = 0; i < pContainerListTextElem->GetCount(); ++i)
 	{
-		if (*ite == pCurTextElem)
+		if (pContainerListTextElem->GetItemAt(i) == m_pParentWnd->m_pCurListTextElem)
 		{
-			if (ite + 1 == vFrameTextElem.end())
+			if (i + 1 == pContainerListTextElem->GetCount())
 			{
 				return ;
 			}
 			else
 			{
-				pCurTextElem->Select(false);
+				 m_pParentWnd->m_pCurListTextElem->Select(false);
+				 
+				 CListTextElementUI* pNextTextElem = static_cast<CListTextElementUI*>(pContainerListTextElem->GetItemAt(i + 1));
+				 m_pParentWnd->m_pCurListTextElem = pNextTextElem;
+				 m_pParentWnd->m_pCurListTextElem->Select(true);
 
-				CListTextElementUI* pNextTextElem = *(ite + 1);
-				pCurTextElem = pNextTextElem;
-				pNextTextElem->Select(true);
-
-				for (size_t i = 0; i < m_vData.size(); ++i)
-				{
-					m_vData[i]->SetText(pNextTextElem->GetText(i));
-					m_vOriginalData[i]=m_vData[i]->GetText();
-				}
+				 for (size_t i = 0; i < m_vData.size(); ++i)
+				 {
+					 m_vData[i]->SetText(pNextTextElem->GetText(i));
+					 m_vOriginalData[i]=m_vData[i]->GetText();
+				 }
 			}
-			break;
+			break ;
 		}
 	}
 }
 
 void PopWnd::OnFirstBtn()
 {
-	vector<CListTextElementUI*> vFrameTextElem;
-	CListTextElementUI* &pCurTextElem =  m_pParentWnd->m_pCurListTextElem;
+	CContainerUI*	pContainerListTextElem = NULL;
 	if (m_pParentWnd->m_pList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vCurListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pList->GetList();
 	}
 	else if (m_pParentWnd->m_pSqlList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vSqlListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pSqlList->GetList();
 	}
 
-	if (!vFrameTextElem.empty())
+	if (0 != pContainerListTextElem->GetCount())
 	{
-		pCurTextElem->Select(false);
+		m_pParentWnd->m_pCurListTextElem->Select(false);
 
-		pCurTextElem = *vFrameTextElem.begin();
-		pCurTextElem->Select(true);
+		m_pParentWnd->m_pCurListTextElem = static_cast<CListTextElementUI*>(pContainerListTextElem->GetItemAt(0));
+		m_pParentWnd->m_pCurListTextElem->Select(true);
 
 		for (size_t i = 0; i < m_vData.size(); ++i)
 		{
-			m_vData[i]->SetText(pCurTextElem->GetText(i));
+			m_vData[i]->SetText(m_pParentWnd->m_pCurListTextElem->GetText(i));
 			m_vOriginalData[i]=m_vData[i]->GetText();
 		}
 	}
+	
 }
 
 void PopWnd::OnLastBtn()
 {
-	vector<CListTextElementUI*> vFrameTextElem;
-	CListTextElementUI* &pCurTextElem =  m_pParentWnd->m_pCurListTextElem;
+	CContainerUI*	pContainerListTextElem = NULL;
 	if (m_pParentWnd->m_pList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vCurListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pList->GetList();
 	}
 	else if (m_pParentWnd->m_pSqlList->Activate())
 	{
-		vFrameTextElem = m_pParentWnd->m_vSqlListTextElem;
+		pContainerListTextElem = m_pParentWnd->m_pSqlList->GetList();
 	}
-	
-	if (!vFrameTextElem.empty())
+	if (0 != pContainerListTextElem->GetCount())
 	{
-		pCurTextElem->Select(false);
+		m_pParentWnd->m_pCurListTextElem->Select(false);
 
-		pCurTextElem = *(vFrameTextElem.end()-1);
-		pCurTextElem->Select(true);
+		m_pParentWnd->m_pCurListTextElem = static_cast<CListTextElementUI*>(pContainerListTextElem->GetItemAt(pContainerListTextElem->GetCount()-1));
+		m_pParentWnd->m_pCurListTextElem->Select(true);
 
 		for (size_t i = 0; i < m_vData.size(); ++i)
 		{
-			m_vData[i]->SetText(pCurTextElem->GetText(i));
+			m_vData[i]->SetText(m_pParentWnd->m_pCurListTextElem->GetText(i));
 			m_vOriginalData[i]=m_vData[i]->GetText();
 		}
 	}
+	
 }
 
 void PopWnd::OnDeleteBtn()
@@ -284,14 +282,13 @@ void PopWnd::OnDeleteBtn()
 		CppSQLite3Query query				=	m_pParentWnd->m_vSqliteDB[m_pParentWnd->m_iCurDBIndex]->execQuery(sql.GetStringUtf8().c_str());
 		query.finalize();
 
-
 		if (m_pParentWnd->m_pList->Activate())
 		{
-			DeletAndSelectOtherTextItem(m_pParentWnd->m_pList,m_pParentWnd->m_vCurListTextElem,m_pParentWnd->m_pCurListTextElem);
+			DeletAndSelectOtherTextItem(m_pParentWnd->m_pList,m_pParentWnd->m_pCurListTextElem);
 		}
 		else if (m_pParentWnd->m_pSqlList->Activate())
 		{
-			DeletAndSelectOtherTextItem(m_pParentWnd->m_pSqlList,m_pParentWnd->m_vSqlListTextElem,m_pParentWnd->m_pCurListTextElem);
+			DeletAndSelectOtherTextItem(m_pParentWnd->m_pSqlList, m_pParentWnd->m_pCurListTextElem);
 		}
 	}
 	catch(CppSQLite3Exception e)
@@ -359,15 +356,6 @@ void PopWnd::OkAdd()
 		}
 		m_pParentWnd->m_pCurListTextElem = pListElement;
 		pListElement->Select(true);
-
-		if (m_pParentWnd->m_pList->Activate())
-		{
-			m_pParentWnd->m_vCurListTextElem.push_back(pListElement);
-		}
-		else if (m_pParentWnd->m_pSqlList->Activate())
-		{
-			m_pParentWnd->m_vSqlListTextElem.push_back(pListElement);
-		}
 	}
 	catch(CppSQLite3Exception e)
 	{

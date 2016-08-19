@@ -19,7 +19,7 @@ public :
 	
 	void AddTable(int DbIndex,string DBName, vector<char*> vTableName);
 	void ShowTable(string tabName,int DBIndex);
-	void ShowList(string sql,int DBIndex, CListUI* pList, vector<CListTextElementUI*>& vCurTextElem);
+	void ShowList(string sql,int DBIndex, CListUI* pList);
 	char* GetDbPath();
 	void loadDB(char *PathName, int DBIndex, string DBName);
 	void executeSQL(string sql,int DBIndex);
@@ -52,16 +52,11 @@ private :
 	 vector<CTreeNodeUI*>				m_vTreeRootNode;//记录代表各个数据库的节点
 
 	 CRichEditUI*						m_pSqlEdit;
-	 
 	 CTreeNodeUI*						m_pCurTreeNode;
 	 CListTextElementUI*				m_pCurListTextElem;
 
 	 CListUI*							m_pList;
-	 vector<CListTextElementUI*>		m_vCurListTextElem; //...
-
 	 CListUI*							m_pSqlList;
-	 vector<CListTextElementUI*>		m_vSqlListTextElem;//...
-
 	 CListUI*							m_pDesignList;
 
 	 CDuiString							m_CDuiStrActiveListItemTableName;
