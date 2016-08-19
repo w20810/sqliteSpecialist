@@ -433,20 +433,21 @@ void PopWnd::OnOkBtn()
 
 void PopWnd::loadFrame()
 {
-	vector<CListHeaderItemUI*>	vParentListItem;
+	//vector<CListHeaderItemUI*>	vParentListItem;
+	CListHeaderUI*	pListHeader = NULL;
 	if (m_pParentWnd->m_pList->Activate())
 	{
-		vParentListItem = m_pParentWnd->m_vCurListItem;
+		pListHeader = m_pParentWnd->m_pList->GetHeader();
 	}
 	else if (m_pParentWnd->m_pSqlList->Activate())
 	{
-		vParentListItem = m_pParentWnd->m_vSqlListHeader;
+		pListHeader = m_pParentWnd->m_pSqlList->GetHeader();
 	}
-
-	for (size_t i = 0; i < vParentListItem.size(); i++)
+	
+	for (int i = 0; i < pListHeader->GetCount(); i++)
 	{
 		CLabelUI*	pLabel = new CLabelUI;
-		pLabel->SetText(vParentListItem[i]->GetText());
+		pLabel->SetText(pListHeader->GetItemAt(i)->GetText());
 		pLabel->SetAttribute(L"textcolor",L"#FF555555");
 		pLabel->SetAttribute(L"glowsize",L"0");
 		pLabel->SetAttribute(L"width",L"120");

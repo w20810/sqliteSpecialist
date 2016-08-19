@@ -158,7 +158,7 @@ void CDuiFrameWnd::addDesignListHeader()
 
 		m_pDesignList->Add(pListHeader);
 
-		m_vDesignListHeader.push_back(pListHeader);
+		
 	}
 }
 
@@ -207,18 +207,19 @@ void CDuiFrameWnd::loadDB(char* PathName, int DBIndex, string DBName)
 	char* ch = TCHAR2char(strhdid.c_str());
 	string strh(ch);
 	
+	vector<char*> vTableName;
+
 	try
 	{
 		m_vSqliteDB[DBIndex]->open(PathName);
 		if (m_vSqliteDB[DBIndex]->isOpen())
 		{
 			CppSQLite3Query query = m_vSqliteDB[DBIndex]->execQuery("SELECT name FROM sqlite_master WHERE type='table' order by name");
-			m_vvTableName.push_back(new vector<char*>);
 			while (!query.eof())
 			{
 				const char* res = query.fieldValue(0);
 				char* ch = Utf82Unicode(res);
-				m_vvTableName[DBIndex]->push_back(ch);
+				vTableName.push_back(ch);
 				query.nextRow();
 			}
 			query.finalize();
@@ -234,21 +235,21 @@ void CDuiFrameWnd::loadDB(char* PathName, int DBIndex, string DBName)
 			{
 				const char* res = query.fieldValue(0);
 				char*		ch  = Utf82Unicode(res);
-				m_vvTableName[DBIndex]->push_back(ch);
+				vTableName.push_back(ch);
 				query.nextRow();
 			}
 			query.finalize();
 		}
 	}
-	AddTable(DBIndex,DBName);
+	AddTable(DBIndex,DBName,vTableName);
 }
 
-void CDuiFrameWnd::AddTable(int DBIndex, string DBName)
+void CDuiFrameWnd::AddTable(int DBIndex, string DBName, vector<char*> vTableName)
 {
 	CTreeNodeUI* pHeadNode = new CTreeNodeUI();
 	m_vTreeRootNode.push_back(pHeadNode);
 	initDBNode(pHeadNode, DBName);
-	addTableNode(DBIndex);
+	addTableNode(DBIndex,vTableName);
 }
 
 void CDuiFrameWnd::executeSQL(string sql, int DBIndex)
@@ -265,12 +266,10 @@ void CDuiFrameWnd::executeSQL(string sql, int DBIndex)
 	}
 
 	m_pSqlList->RemoveAll();
-	for (size_t i = 0; i < m_vSqlListHeader.size(); i++)
-	{
-		m_pSqlList->Remove(m_vSqlListHeader[i]);
-	}
+	m_pSqlList->GetHeader()->RemoveAll();
+
 	m_vSqlListTextElem.clear();
-	m_vSqlListHeader.clear();
+	
 
 	m_pSqlList->SetAttribute(L"itemalign",L"center");
 
@@ -300,21 +299,21 @@ void CDuiFrameWnd::executeSQL(string sql, int DBIndex)
 		MessageBoxA(NULL, e.errorMessage(), "Error", MB_OK);
 		return ;
 	}
-	ShowList(sql,DBIndex, m_pSqlList,m_vSqlListHeader, m_vSqlListTextElem);
+	ShowList(sql,DBIndex, m_pSqlList, m_vSqlListTextElem);
 }
 
-void CDuiFrameWnd::addTableNode(int DBIndex)
+void CDuiFrameWnd::addTableNode(int DBIndex, vector<char*> vTableName)
 {
-	for (size_t i = 0; i < m_vvTableName[DBIndex]->size(); i++)
+	for (size_t i = 0; i < vTableName.size(); i++)
 	{
 		CTreeNodeUI* pTreeNodeElement = new CTreeNodeUI(m_vTreeRootNode[DBIndex]);
-		pTreeNodeElement->SetName(LPCTSTR((*m_vvTableName[DBIndex])[i]));
-		pTreeNodeElement->SetItemText(LPCTSTR((*m_vvTableName[DBIndex])[i]));
+		pTreeNodeElement->SetName(LPCTSTR(vTableName[i]));
+		pTreeNodeElement->SetItemText(LPCTSTR(vTableName[i]));
 		pTreeNodeElement->GetCheckBox()->SetAttribute(L"width",L"15");
 		pTreeNodeElement->GetCheckBox()->SetAttribute(L"height",L"15");
 		pTreeNodeElement->GetCheckBox()->SetAttribute(L"normalimage",L"resource/tables.png");
 		pTreeNodeElement->GetItemButton()->SetFont(4);
-		pTreeNodeElement->GetTreeNodeHoriznotal()->SetToolTip(LPCTSTR((*m_vvTableName[DBIndex])[i]));
+		pTreeNodeElement->GetTreeNodeHoriznotal()->SetToolTip(LPCTSTR(vTableName[i]));
 		pTreeNodeElement->SetParentNode(m_vTreeRootNode[DBIndex]);
 		if(i & 1)
 		{
@@ -340,8 +339,8 @@ void CDuiFrameWnd::refreshDB()
 	{
 		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
 	}
-	(*m_vvTableName[m_iCurDBIndex]).clear();
-
+	
+	vector<char*>	vTableName;
 	try
 	{
 		if (m_vSqliteDB[m_iCurDBIndex]->isOpen())
@@ -352,7 +351,7 @@ void CDuiFrameWnd::refreshDB()
 			{
 				const char* res = query.fieldValue(0);
 				char*		ch  = Utf82Unicode(res);
-				m_vvTableName[m_iCurDBIndex]->push_back(ch);
+				vTableName.push_back(ch);
 				query.nextRow();
 			}
 			query.finalize();
@@ -367,14 +366,14 @@ void CDuiFrameWnd::refreshDB()
 			{
 				const char* res = query.fieldValue(0);
 				char*		ch  = Utf82Unicode(res);
-				m_vvTableName[m_iCurDBIndex]->push_back(ch);
+				vTableName.push_back(ch);
 				query.nextRow();
 			}
 			query.finalize();
 		}
 	}
 
-	addTableNode(m_iCurDBIndex);
+	addTableNode(m_iCurDBIndex,vTableName);
 	m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 }
 
@@ -391,12 +390,8 @@ void CDuiFrameWnd::unloadDB()
 	}
 
 	m_pList->RemoveAll();
-	for (size_t i = 0; i < m_vCurListItem.size(); i++)
-	{
-		m_pList->Remove(m_vCurListItem[i]);
-	}
+	m_pList->GetHeader()->RemoveAll();
 	m_vCurListTextElem.clear();
-	m_vCurListItem.clear();
 
 	while (m_vTreeRootNode[m_iCurDBIndex]->GetCountChild())  
 	{
@@ -406,18 +401,14 @@ void CDuiFrameWnd::unloadDB()
 
 	m_vSqliteDB.erase(std::find(m_vSqliteDB.begin(),m_vSqliteDB.end(),m_vSqliteDB[m_iCurDBIndex]));
 	m_vTreeRootNode.erase(std::find(m_vTreeRootNode.begin(),m_vTreeRootNode.end(),m_vTreeRootNode[m_iCurDBIndex])); 
-	m_vvTableName.erase(std::find(m_vvTableName.begin(),m_vvTableName.end(),m_vvTableName[m_iCurDBIndex]));
 	m_vDBPath.erase(std::find(m_vDBPath.begin(),m_vDBPath.end(),m_pDBPathLabel->GetText()));
 
 	m_pDesignList->RemoveAll();
 
 	if (0 == m_vSqliteDB.size())
 	{
-		for (size_t i = 0; i < m_vDesignListHeader.size(); i++)
-		{
-			m_pDesignList->Remove(m_vDesignListHeader[i]);
-		}
-		m_vDesignListHeader.clear();
+		m_pDesignList->GetHeader()->RemoveAll();
+		
 	}
 
 	if (0 == m_iCurDBIndex)
@@ -530,11 +521,7 @@ void CDuiFrameWnd::OnClickOpenFileBtn()
 		m_vTreeRootNode[m_iCurDBIndex]->Select(true);
 
 		m_pList->RemoveAll();
-		for (vector<CListHeaderItemUI*>::iterator ite = m_vCurListItem.begin(); ite != m_vCurListItem.end(); ++ite)
-		{
-			m_pList->Remove(*ite);
-		}
-		m_vCurListItem.clear();
+		m_pList->GetHeader()->RemoveAll();
 		m_vCurListTextElem.clear();
 
 		m_pDesignList->RemoveAll();
@@ -565,18 +552,11 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 			{
 				m_pCurTreeNode = m_vTreeRootNode[i];
 				m_pDesignList->RemoveAll();
-				for (size_t i = 0; i < m_vDesignListHeader.size(); i++)
-				{
-					m_pDesignList->Remove(m_vDesignListHeader[i]);
-				}
-				m_vDesignListHeader.clear();
+				m_pDesignList->GetHeader()->RemoveAll();
+			
 
 				m_pList->RemoveAll();
-				for (size_t i = 0; i < m_vCurListItem.size(); ++i)
-				{
-					m_pList->Remove(m_vCurListItem[i]);
-				}
-				m_vCurListItem.clear();
+				m_pList->GetHeader()->RemoveAll();
 				m_vCurListTextElem.clear();
 			}
 			else
@@ -587,7 +567,7 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 				ShowTable(name, m_iCurDBIndex);
 				showDesign(name, m_iCurDBIndex);
 
-				if (m_vDesignListHeader.empty())
+				if (!m_pDesignList->GetHeader()->GetCount())
 				{
 					addDesignListHeader();
 				}
@@ -707,7 +687,7 @@ void CDuiFrameWnd::OnClickTabSwitch(TNotifyUI& msg)
 	}
 }
 
-void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList, vector<CListHeaderItemUI* >& vCurListHeader, vector<CListTextElementUI*>& vCurTextElem)
+void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList, vector<CListTextElementUI*>& vCurTextElem)
 {
 	if (DBIndex < 0 )
 	{
@@ -715,10 +695,9 @@ void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList, vector<CListH
 	}
 
 	pList->RemoveAll();
-	for (size_t i = 0; i < vCurListHeader.size(); i++)
-		pList->Remove(vCurListHeader[i]);
+	pList->GetHeader()->RemoveAll();
 	vCurTextElem.clear();
-	vCurListHeader.clear();
+
 
 	try
 	{
@@ -726,7 +705,7 @@ void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList, vector<CListH
 		int				col		=	query.numFields();
 		vector<int >				vTextLen(col,0);
 		vector<CListHeaderItemUI*>	vHeadItem;
-
+		
 		CString str(" ");
 		HDC hDC = ::GetDC(this->m_hWnd);
 		SIZE sz;
@@ -761,8 +740,6 @@ void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList, vector<CListH
 			pListHItem->SetAttribute(L"sepwidth",L"1");
 
 			pList->Add(pListHItem);
-
-			vCurListHeader.push_back(pListHItem);
 		}
 
 		pList->NeedParentUpdate();
@@ -801,7 +778,7 @@ void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList, vector<CListH
 void CDuiFrameWnd::ShowTable(string TabName,int DBIndex)
 {
 	string sql = string("select * from ") + TabName;
-	ShowList(sql,DBIndex,m_pList, m_vCurListItem, m_vCurListTextElem);
+	ShowList(sql,DBIndex,m_pList, m_vCurListTextElem);
 }
 
 void CDuiFrameWnd::Notify(TNotifyUI& msg)
