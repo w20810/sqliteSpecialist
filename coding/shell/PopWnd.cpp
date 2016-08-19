@@ -149,6 +149,7 @@ void PopWnd::OnPreviousBtn()
 	{
 		pContainerListTextElem = m_pParentWnd->m_pSqlList->GetList();
 	}
+	
 	for (int i = 0; i < pContainerListTextElem->GetCount(); ++i)
 	{
 		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(pContainerListTextElem->GetItemAt(i));
@@ -240,7 +241,6 @@ void PopWnd::OnFirstBtn()
 			m_vOriginalData[i]=m_vData[i]->GetText();
 		}
 	}
-	
 }
 
 void PopWnd::OnLastBtn()
@@ -267,7 +267,6 @@ void PopWnd::OnLastBtn()
 			m_vOriginalData[i]=m_vData[i]->GetText();
 		}
 	}
-	
 }
 
 void PopWnd::OnDeleteBtn()

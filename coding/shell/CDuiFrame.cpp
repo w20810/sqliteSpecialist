@@ -157,8 +157,6 @@ void CDuiFrameWnd::addDesignListHeader()
 		pListHeader->SetSepWidth(1);
 
 		m_pDesignList->Add(pListHeader);
-
-		
 	}
 }
 
@@ -193,6 +191,7 @@ void CDuiFrameWnd::InitWindow()
 	m_pPopWnd->setParentWnd(this);
 	m_pPopWnd->Create(this->m_hWnd,_T("Record Editor"), WS_POPUP | WS_VISIBLE, 0L, 0, 0, 800, 572);
 	m_pPopWnd->ShowWindow(false);
+	m_bPopWndIsShowing = false;
 	m_iCurDBIndex = -1;
 
 	loadPowerWordDB();
@@ -286,7 +285,7 @@ void CDuiFrameWnd::executeSQL(string sql, int DBIndex)
 		}
 		if (mod != string("SELECT"))
 		{
-			CppSQLite3Query query = m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
+			m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
 			return ;
 		}
 		m_CDuiStrActiveListItemTableName = getTableNameFromSQL(sql.c_str());
@@ -332,10 +331,10 @@ void CDuiFrameWnd::refreshDB()
 		return ;
 	}
 
-	while (m_vTreeRootNode[m_iCurDBIndex]->GetCountChild())  
+ 	while (m_vTreeRootNode[m_iCurDBIndex]->IsHasChild())  
 	{
-		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
-	}
+ 		m_vTreeRootNode[m_iCurDBIndex]->RemoveAt(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
+ 	}
 	
 	vector<char*>	vTableName;
 	try
@@ -389,7 +388,7 @@ void CDuiFrameWnd::unloadDB()
 	m_pList->RemoveAll();
 	m_pList->GetHeader()->RemoveAll();
 
-	while (m_vTreeRootNode[m_iCurDBIndex]->GetCountChild())  
+	while (m_vTreeRootNode[m_iCurDBIndex]->IsHasChild())  
 	{
 		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
 	}
@@ -398,13 +397,11 @@ void CDuiFrameWnd::unloadDB()
 	m_vSqliteDB.erase(std::find(m_vSqliteDB.begin(),m_vSqliteDB.end(),m_vSqliteDB[m_iCurDBIndex]));
 	m_vTreeRootNode.erase(std::find(m_vTreeRootNode.begin(),m_vTreeRootNode.end(),m_vTreeRootNode[m_iCurDBIndex])); 
 	m_vDBPath.erase(std::find(m_vDBPath.begin(),m_vDBPath.end(),m_pDBPathLabel->GetText()));
-
 	m_pDesignList->RemoveAll();
 
 	if (0 == m_vSqliteDB.size())
 	{
 		m_pDesignList->GetHeader()->RemoveAll();
-		
 	}
 
 	if (0 == m_iCurDBIndex)
@@ -413,7 +410,6 @@ void CDuiFrameWnd::unloadDB()
 		{
 			m_iCurDBIndex	=  -1 ;
 			m_pCurTreeNode	=  NULL;
-
 			m_pDBPathLabel->SetText(L"");
 		}
 		else
@@ -443,7 +439,7 @@ void CDuiFrameWnd::showDesign(string tabName, int DBIndex)
 	{
 		const char*			strName			=	query.fieldName(i);
 		const char*			strDeclType		=	query.fieldDeclType(i);
-		CListTextElementUI* pListTextElem	= new CListTextElementUI();
+		CListTextElementUI* pListTextElem	=   new CListTextElementUI();
 		
 		pDesignList->Add(pListTextElem);
 		pListTextElem->SetText(0,LPCTSTR(Utf82Unicode(strName)));
@@ -454,32 +450,18 @@ void CDuiFrameWnd::showDesign(string tabName, int DBIndex)
 
 void CDuiFrameWnd::OnListTextElemActive(TNotifyUI& msg)
 {
-	
-	for (int i = 0; i < m_pList->GetList()->GetCount(); i++)
+	if (msg.pSender->GetParent()->GetParent() == m_pList || msg.pSender->GetParent()->GetParent() == m_pSqlList)
 	{
-		if (msg.pSender == m_pList->GetList()->GetItemAt(i))
+		if (msg.pSender->GetParent()->GetParent() == m_pList)
 		{
-			m_pCurListTextElem = static_cast<CListTextElementUI*>(m_pList->GetList()->GetItemAt(i));
 			m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
-			m_pPopWnd->InitWindow();
-			m_pPopWnd->CenterWindow();
-			m_pPopWnd->ShowWindow(true);
-			m_bPopWndIsShowing = true;
-			return ;
 		}
-	}
-	for (int i = 0; i < m_pSqlList->GetList()->GetCount(); ++i)
-	{
-		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(m_pSqlList->GetList()->GetItemAt(i));
-		if (msg.pSender == pListTextElem)
-		{
-			m_pCurListTextElem = pListTextElem;
-			m_pPopWnd->InitWindow();
-			m_pPopWnd->CenterWindow();
-			m_pPopWnd->ShowWindow(true);
-			m_bPopWndIsShowing = true;
-			return ;
-		}
+		m_pCurListTextElem = static_cast<CListTextElementUI*>(msg.pSender);
+		m_pPopWnd->InitWindow();
+		m_pPopWnd->CenterWindow();
+		m_pPopWnd->ShowWindow(true);
+		m_bPopWndIsShowing = true;
+		return ;
 	}
 }
 
@@ -520,7 +502,6 @@ void CDuiFrameWnd::OnClickOpenFileBtn()
 
 		m_pList->RemoveAll();
 		m_pList->GetHeader()->RemoveAll();
-	
 		m_pDesignList->RemoveAll();
 
 		if (1 == m_vSqliteDB.size()) 
@@ -559,7 +540,6 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 			{
 				m_pCurTreeNode = m_vTreeRootNode[i]->GetChildNode(count - 2);
 				string name = m_pCurTreeNode->GetName().GetStringUtf8();
-				
 				ShowTable(name, m_iCurDBIndex);
 				showDesign(name, m_iCurDBIndex);
 
@@ -575,97 +555,44 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 
 void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 {
-	CDuiString name = msg.pSender->GetName();
-
 	if (msg.pSender == m_pList || msg.pSender == m_pSqlList)  
 	{
-		for (int i = 0; i < m_pList->GetList()->GetCount(); i++)
+		if (NULL != m_pCurListTextElem)
 		{
-			CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(m_pList->GetList()->GetItemAt(i));
-			if (pListTextElem->IsSelected())  //psender ²¢²»ÊÇ pListTextElem
+			m_pCurListTextElem->Select(false);
+		}
+		CListTextElementUI* pListTextElem = static_cast<CListTextElementUI*>(static_cast<CListUI*>(msg.pSender)->GetList()->GetItemAt(msg.wParam));
+		
+		pListTextElem->Select(true);
+		if (m_bPopWndIsShowing)
+		{
+			m_pCurListTextElem = pListTextElem;
+			if (msg.pSender == m_pList)
 			{
-				pListTextElem->Select(true);    
-				if (true == m_bPopWndIsShowing)
-				{
-					m_pCurListTextElem = pListTextElem;
-					m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
-					m_pPopWnd->InitWindow(); 
-					m_pPopWnd->ShowWindow(true);
-					m_bPopWndIsShowing = true;
-					return ;
-				}
-			}
-		}
-		for (int i = 0; i < m_pSqlList->GetList()->GetCount(); ++i)
-		{
-			CListTextElementUI* pListTextElem = static_cast<CListTextElementUI*>(m_pSqlList->GetList()->GetItemAt(i));
-			if (pListTextElem->IsSelected())
-			{
-				if (true == m_bPopWndIsShowing)
-				{
-					m_pCurListTextElem = pListTextElem;
-					m_pPopWnd->InitWindow();
-					m_pPopWnd->ShowWindow(true);
-					m_bPopWndIsShowing = true;
-
-					return ;
-				}
-			}
-		}
-		return ;
-	}
-
-	for (int i = 0; i < m_pList->GetList()->GetCount(); i++)
-	{
-		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(m_pList->GetList()->GetItemAt(i));
-		if (msg.pSender != pListTextElem && pListTextElem->IsSelected())
-		{
-			pListTextElem->Select(false);
-		}
-	}
-	for (int i =0; i < m_pSqlList->GetList()->GetCount(); ++i)
-	{
-		CListTextElementUI* pListTextElem = static_cast<CListTextElementUI*>(m_pSqlList->GetList()->GetItemAt(i));
-		if (msg.pSender != pListTextElem && pListTextElem->IsSelected())
-		{
-			pListTextElem->Select(false);
-		}
-	}
-
-	for (int i = 0; i < m_pList->GetList()->GetCount(); i++)
-	{
-		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(m_pList->GetList()->GetItemAt(i));
-		if (msg.pSender == pListTextElem )
-		{
-			pListTextElem->Select(true);
-			if (true == m_bPopWndIsShowing)
-			{
-				m_pCurListTextElem = pListTextElem;
 				m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
-
-				m_pPopWnd->InitWindow();
-				m_pPopWnd->ShowWindow(true);
-				m_bPopWndIsShowing = true;
-				return ;
 			}
+			m_pPopWnd->InitWindow();
+			m_pPopWnd->ShowWindow(true);
+			m_bPopWndIsShowing = true;
+			return ;
 		}
 	}
-	for (int i = 0; i < m_pSqlList->GetList()->GetCount(); ++i)
+
+	if (msg.pSender->GetParent()->GetParent() == m_pSqlList || msg.pSender->GetParent()->GetParent() == m_pList)
 	{
-		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(m_pSqlList->GetList()->GetItemAt(i));
-		if (msg.pSender == pListTextElem )
+		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(msg.pSender);
+		pListTextElem->Select(true);
+		if (true == m_bPopWndIsShowing)
 		{
-			pListTextElem->Select(true);
-			if (true == m_bPopWndIsShowing)
+			m_pCurListTextElem = pListTextElem;
+			if (msg.pSender->GetParent()->GetParent() == m_pList)
 			{
-				m_pCurListTextElem = pListTextElem;
-
-				m_pPopWnd->InitWindow();
-				m_pPopWnd->ShowWindow(true);
-				m_bPopWndIsShowing = true;
-
-				return ;
+				m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
 			}
+			m_pPopWnd->InitWindow();
+			m_pPopWnd->ShowWindow(true);
+			m_bPopWndIsShowing = true;
+			return ;
 		}
 	}
 }
