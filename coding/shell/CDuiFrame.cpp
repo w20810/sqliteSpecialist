@@ -394,9 +394,9 @@ void CDuiFrameWnd::unloadDB()
 	}
 	m_pTreeView->Remove(m_vTreeRootNode[m_iCurDBIndex]);
 
-	m_vSqliteDB.erase(std::find(m_vSqliteDB.begin(),m_vSqliteDB.end(),m_vSqliteDB[m_iCurDBIndex]));
-	m_vTreeRootNode.erase(std::find(m_vTreeRootNode.begin(),m_vTreeRootNode.end(),m_vTreeRootNode[m_iCurDBIndex])); 
-	m_vDBPath.erase(std::find(m_vDBPath.begin(),m_vDBPath.end(),m_pDBPathLabel->GetText()));
+	m_vSqliteDB.erase(m_vSqliteDB.begin()+m_iCurDBIndex);
+	m_vTreeRootNode.erase(m_vTreeRootNode.begin()+m_iCurDBIndex);
+	m_vDBPath.erase(m_vDBPath.begin()+m_iCurDBIndex);
 	m_pDesignList->RemoveAll();
 
 	if (0 == m_vSqliteDB.size())
@@ -513,6 +513,7 @@ void CDuiFrameWnd::OnClickOpenFileBtn()
 
 void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 {
+	m_pCurListTextElem = false;
 	m_pPopWnd->ClearFrame();
 	int count = msg.wParam + 1;//触发事件的节点在treeView中的编号
 	for (size_t i = 0; i < m_vTreeRootNode.size(); i++)
@@ -564,9 +565,9 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 		CListTextElementUI* pListTextElem = static_cast<CListTextElementUI*>(static_cast<CListUI*>(msg.pSender)->GetList()->GetItemAt(msg.wParam));
 		
 		pListTextElem->Select(true);
+		m_pCurListTextElem = pListTextElem;
 		if (m_bPopWndIsShowing)
 		{
-			m_pCurListTextElem = pListTextElem;
 			if (msg.pSender == m_pList)
 			{
 				m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
@@ -581,10 +582,11 @@ void CDuiFrameWnd::updatePopWnd(TNotifyUI& msg)
 	if (msg.pSender->GetParent()->GetParent() == m_pSqlList || msg.pSender->GetParent()->GetParent() == m_pList)
 	{
 		CListTextElementUI*	pListTextElem = static_cast<CListTextElementUI*>(msg.pSender);
+		m_pCurListTextElem = pListTextElem;
 		pListTextElem->Select(true);
 		if (true == m_bPopWndIsShowing)
 		{
-			m_pCurListTextElem = pListTextElem;
+			
 			if (msg.pSender->GetParent()->GetParent() == m_pList)
 			{
 				m_CDuiStrActiveListItemTableName = m_pCurTreeNode->GetItemText();
@@ -708,7 +710,7 @@ void CDuiFrameWnd::ShowTable(string TabName,int DBIndex)
 
 void CDuiFrameWnd::Notify(TNotifyUI& msg)
 {
-	if ( msg.sType == _T("itemactivate") )
+	if (msg.sType == _T("itemactivate"))
 	{
 		OnListTextElemActive(msg);
 	}
