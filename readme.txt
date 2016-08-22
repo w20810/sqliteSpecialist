@@ -1,1 +1,3 @@
-未解决的bug:CDuiFrameWnd中的ListTextElem的上下键和PopWnd中向前向后的按钮，操作后m_pCurTextList的值不同步。
+未解决的bug:
+1.CDuiFrameWnd中的ListTextElem的上下键和PopWnd中向前向后的按钮，操作后m_pCurTextList的值不同步。
+
