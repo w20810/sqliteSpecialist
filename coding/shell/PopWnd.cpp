@@ -137,7 +137,7 @@ void PopWnd::DeletAndSelectOtherTextItem(CListUI* pFrameList, CListTextElementUI
 	}
 }
 
-void PopWnd::OnPreviousBtn()
+void PopWnd::OnClickPreviousBtn()
 {
 	CContainerUI*	pContainerListTextElem = NULL;
 	CListTextElementUI* &pCurTextElem =  m_pParentWnd->m_pCurListTextElem;
@@ -178,7 +178,7 @@ void PopWnd::OnPreviousBtn()
 	}
 }
 
-void PopWnd::OnNextBtn()
+void PopWnd::OnClickNextBtn()
 {
 	CContainerUI*	pContainerListTextElem = NULL;
 	if (m_pParentWnd->m_pList->Activate())
@@ -216,7 +216,7 @@ void PopWnd::OnNextBtn()
 	}
 }
 
-void PopWnd::OnFirstBtn()
+void PopWnd::OnClickFirstBtn()
 {
 	CContainerUI*	pContainerListTextElem = NULL;
 	if (m_pParentWnd->m_pList->Activate())
@@ -243,7 +243,7 @@ void PopWnd::OnFirstBtn()
 	}
 }
 
-void PopWnd::OnLastBtn()
+void PopWnd::OnClickLastBtn()
 {
 	CContainerUI*	pContainerListTextElem = NULL;
 	if (m_pParentWnd->m_pList->Activate())
@@ -269,7 +269,7 @@ void PopWnd::OnLastBtn()
 	}
 }
 
-void PopWnd::OnDeleteBtn()
+void PopWnd::OnClickDeleteBtn()
 {
 	try 
 	{
@@ -296,13 +296,39 @@ void PopWnd::OnDeleteBtn()
 	}
 }
 
-void PopWnd::OnAddBtn()
+void PopWnd::OnClickAddBtn()
 {
 	for (size_t i = 0; i < m_vData.size(); i++)
 	{
 		m_vData[i]->SetText(L"");
 	}
 	m_enumSQL_STATU = YX__SQL__ADD ;
+}
+
+void PopWnd::AddListTextELem()
+{
+	CListTextElementUI* pListElement = new CListTextElementUI;
+	if (m_pParentWnd->m_pList->Activate())
+	{
+		m_pParentWnd->m_pList->Add(pListElement);
+	}
+	else if (m_pParentWnd->m_pSqlList->Activate())
+	{
+		m_pParentWnd->m_pSqlList->Add(pListElement);
+	}
+
+	pListElement->SetAttribute(L"margin", L"20, 0, 0, 0");
+	pListElement->SetAttribute(L"textpadding",L"20, 20, 20, 20");
+	for (size_t i = 0; i < m_vData.size(); i++)
+	{
+		pListElement->SetText(i,m_vData[i]->GetText());
+	}
+	if (NULL != m_pParentWnd->m_pCurListTextElem)
+	{
+		m_pParentWnd->m_pCurListTextElem->Select(false);
+	}
+	m_pParentWnd->m_pCurListTextElem = pListElement;
+	pListElement->Select(true);
 }
 
 void PopWnd::OkAdd()
@@ -331,30 +357,7 @@ void PopWnd::OkAdd()
 		}
 		stm.execDML();
 		stm.finalize();
-
-		//更新list数据
-		CListTextElementUI* pListElement = new CListTextElementUI;
-		if (m_pParentWnd->m_pList->Activate())
-		{
-			m_pParentWnd->m_pList->Add(pListElement);
-		}
-		else if (m_pParentWnd->m_pSqlList->Activate())
-		{
-			m_pParentWnd->m_pSqlList->Add(pListElement);
-		}
-
-		pListElement->SetAttribute(L"margin", L"20, 0, 0, 0");
-		pListElement->SetAttribute(L"textpadding",L"20, 20, 20, 20");
-		for (size_t i = 0; i < m_vData.size(); i++)
-		{
-			pListElement->SetText(i,m_vData[i]->GetText());
-		}
-		if (NULL != m_pParentWnd->m_pCurListTextElem)
-		{
-			m_pParentWnd->m_pCurListTextElem->Select(false);
-		}
-		m_pParentWnd->m_pCurListTextElem = pListElement;
-		pListElement->Select(true);
+		AddListTextELem();
 	}
 	catch(CppSQLite3Exception e)
 	{
@@ -406,7 +409,7 @@ void PopWnd::OkUpdate()
 	}
 }
 
-void PopWnd::OnOkBtn()
+void PopWnd::OnClickOkBtn()
 {
 	if (YX__SQL__ADD == m_enumSQL_STATU)
 	{
@@ -418,7 +421,7 @@ void PopWnd::OnOkBtn()
 	}
 }
 
-void PopWnd::loadFrame()
+void PopWnd::LoadFrame()
 {
 	//vector<CListHeaderItemUI*>	vParentListItem;
 	CListHeaderUI*	pListHeader = NULL;
@@ -472,7 +475,7 @@ void PopWnd::InitWindow()
 	m_enumSQL_STATU =	YX__SQL__UPDATE;
 	
 	ClearFrame();
-	loadFrame();
+	LoadFrame();
 }
 void PopWnd::Notify(TNotifyUI& msg)
 {
@@ -480,31 +483,31 @@ void PopWnd::Notify(TNotifyUI& msg)
 	{
 		if (msg.pSender == m_pDeleteBtn)
 		{
-			OnDeleteBtn();
+			OnClickDeleteBtn();
 		}
 		else if (msg.pSender == m_pAddBtn)
 		{
-			OnAddBtn();
+			OnClickAddBtn();
 		}
 		else if (msg.pSender == m_pOkBtn)
 		{
-			OnOkBtn();
+			OnClickOkBtn();
 		}
 		else if (msg.pSender == m_pFirstBtn)
 		{
-			OnFirstBtn();
+			OnClickFirstBtn();
 		}
 		else if (msg.pSender == m_pPreviousBtn)
 		{
-			OnPreviousBtn();
+			OnClickPreviousBtn();
 		}
 		else if (msg.pSender == m_pNextBtn)
 		{
-			OnNextBtn();
+			OnClickNextBtn();
 		}
 		else if (msg.pSender == m_pLastBtn)
 		{
-			OnLastBtn();
+			OnClickLastBtn();
 		}
 		else if (msg.pSender->GetName() == _T("closebtn") )
 		{
@@ -516,7 +519,7 @@ void PopWnd::Notify(TNotifyUI& msg)
 	__super::Notify(msg);
 }
 
-void PopWnd::setParentWnd(CDuiFrameWnd* parentWnd)
+void PopWnd::SetParentWnd(CDuiFrameWnd* parentWnd)
 {
 	this->m_pParentWnd = parentWnd;
 }

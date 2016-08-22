@@ -13,15 +13,16 @@ public:
 	void OkAdd();
 	void OkUpdate();
 	void ClearFrame();
-	void OnPreviousBtn();
-	void OnNextBtn();
-	void OnFirstBtn();
-	void OnLastBtn();
-	void OnDeleteBtn();
-	void OnAddBtn();
-	void OnOkBtn();
-	void loadFrame();
-	void setParentWnd(CDuiFrameWnd* parentWnd);
+	void OnClickPreviousBtn();
+	void OnClickNextBtn();
+	void OnClickFirstBtn();
+	void OnClickLastBtn();
+	void OnClickDeleteBtn();
+	void OnClickAddBtn();
+	void OnClickOkBtn();
+	void LoadFrame();
+	void SetParentWnd(CDuiFrameWnd* parentWnd);
+	void AddListTextELem();
 	void DeletAndSelectOtherTextItem(CListUI* pFrameList, CListTextElementUI* &pDeleteTextElem);
 
 private:

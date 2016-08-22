@@ -17,26 +17,24 @@ public :
 	//virtual LPCTSTR GetResourceID() const  ; 
 	//virtual UILIB_RESOURCETYPE GetResourceType() const ;
 
-	void AddTable(int DbIndex,string DBName, vector<char*> vTableName);
-	void ShowTable(string tabName,int DBIndex);
+	void AddTreeNodes(int DbIndex,string DBName, vector<char*> vTableName);
+	void ShowListFromTable(string tabName,int DBIndex);
 	void ShowList(string sql,int DBIndex, CListUI* pList);
-	char* GetDbPath();
-	void loadDB(char *PathName, int DBIndex, string DBName);
-	void executeSQL(string sql,int DBIndex);
-	void showDesign(string tabName,int DBIndex);
-	void unloadDB();
-	void refreshDB();
-	void loadPowerWordDB();
-
+	char* GetPowerWordDBPath();
+	void LoadDB(char *PathName, int DBIndex, string DBName);
+	void ExecuteSQL(string sql,int DBIndex);
+	void showDesignList(string tabName,int DBIndex);
+	void UnloadDB();
+	void RefreshDB();
+	void LoadPowerWordDB();
 	void OnListTextElemActive(TNotifyUI& msg);
 	void OnClickOpenFileBtn();
 	void OnTreeNodeClickOrSelect(TNotifyUI& msg);
 	void OnClickTabSwitch(TNotifyUI& msg);
-	void updatePopWnd(TNotifyUI& msg);
-	
-	void addDesignListHeader();
-	void addTableNode(int DBIndex, vector<char*> vTableName);
-	void initDBNode(CTreeNodeUI* pHeadNode, string DBName);
+	void UpdatePopWnd(TNotifyUI& msg);
+	void AddDesignListHeader();
+	void AddLowerLevelTreeNodes(int DBIndex, vector<char*> vTableName);
+	void InitDBNode(CTreeNodeUI* pHeadNode, string DBName);
 private :
 	 int								m_iCurDBIndex;   //当前数据库的索引
 	 vector<CppSQLite3DB*>				m_vSqliteDB;     //保存多个数据库
