@@ -423,7 +423,6 @@ void PopWnd::OnClickOkBtn()
 
 void PopWnd::LoadFrame()
 {
-	//vector<CListHeaderItemUI*>	vParentListItem;
 	CListHeaderUI*	pListHeader = NULL;
 	if (m_pParentWnd->m_pList->Activate())
 	{
@@ -471,9 +470,7 @@ void PopWnd::InitWindow()
 	m_pPreviousBtn	=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetPreviousBtn")));
 	m_pNextBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetNextBtn")));
 	m_pLastBtn		=	static_cast<CButtonUI*>(m_PaintManager.FindControl(_T("GetLastBtn")));
-
 	m_enumSQL_STATU =	YX__SQL__UPDATE;
-	
 	ClearFrame();
 	LoadFrame();
 }

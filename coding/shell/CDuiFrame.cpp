@@ -205,7 +205,6 @@ void CDuiFrameWnd::LoadDB(char* PathName, int DBIndex, string DBName)
 	string strh(ch);
 	
 	vector<char*> vTableName;
-
 	try
 	{
 		m_vSqliteDB[DBIndex]->open(PathName);
@@ -330,7 +329,7 @@ void CDuiFrameWnd::RefreshDB()
 		MessageBoxA(NULL,"请选择一个数据库","faild",MB_OK);
 		return ;
 	}
-
+	
  	while (m_vTreeRootNode[m_iCurDBIndex]->IsHasChild())  
 	{
  		m_vTreeRootNode[m_iCurDBIndex]->RemoveAt(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
@@ -389,9 +388,9 @@ void CDuiFrameWnd::UnloadDB()
 	m_pList->GetHeader()->RemoveAll();
 
 	while (m_vTreeRootNode[m_iCurDBIndex]->IsHasChild())  
-	{
-		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
-	}
+ 	{
+ 		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
+ 	}
 	m_pTreeView->Remove(m_vTreeRootNode[m_iCurDBIndex]);
 
 	m_vSqliteDB.erase(m_vSqliteDB.begin()+m_iCurDBIndex);
@@ -419,9 +418,7 @@ void CDuiFrameWnd::UnloadDB()
 	}
 	else
 	{
-		m_iCurDBIndex = -- m_iCurDBIndex;
-		int sz = m_vTreeRootNode.size();
-		m_vTreeRootNode[m_iCurDBIndex]->Select(true);
+		m_vTreeRootNode[--m_iCurDBIndex]->Select(true);
 	}
 	m_pPopWnd->ShowWindow(false);
 	m_bPopWndIsShowing =  false;
@@ -533,7 +530,6 @@ void CDuiFrameWnd::OnTreeNodeClickOrSelect(TNotifyUI& msg)
 				m_pDesignList->RemoveAll();
 				m_pDesignList->GetHeader()->RemoveAll();
 			
-
 				m_pList->RemoveAll();
 				m_pList->GetHeader()->RemoveAll();
 			}
@@ -617,6 +613,65 @@ void CDuiFrameWnd::OnClickTabSwitch(TNotifyUI& msg)
 	}
 }
 
+void AddListHeader(CppSQLite3Query& pQuery, CListUI* pList, vector<int >& pVecWidth, int ratio)
+{
+	try
+	{
+		int	col	= pQuery.numFields();
+		for (int i = 0; i < col; i++)
+		{
+			CListHeaderItemUI*  pListHItem = new CListHeaderItemUI;
+			const char* res = pQuery.fieldName(i);
+
+			int			w	=  strlen(res)*ratio;
+			pVecWidth[i]		=  pVecWidth[i]>w?pVecWidth[i]:w;
+			pVecWidth[i] += 60+col+1;
+
+			pListHItem->SetName(LPCTSTR(Utf82Unicode(res)));
+			pListHItem->SetText(LPCTSTR(Utf82Unicode(res)));
+			pListHItem->SetFont(4);
+			pListHItem->SetAttribute(L"hotimage",L"resource/list_header_hot.png");
+			pListHItem->SetAttribute(L"pushedimage",L"resource/list_header_pushed.png");
+			pListHItem->SetAttribute(L"sepimage",L"resource/list_header_sep.png");
+			pListHItem->SetAttribute(L"sepwidth",L"1");
+
+			pList->Add(pListHItem);
+		}
+	}
+	catch(CppSQLite3Exception e)
+	{
+		throw e;
+	}
+}
+
+void AddListTextElem(CppSQLite3Query& pQuery, CListUI* pList, vector<int >&	pVecWidth, int ratio)
+{
+	try
+	{
+		while(!pQuery.eof())
+		{
+			CListTextElementUI* pListElement = new CListTextElementUI;
+			pList->Add(pListElement);
+
+			int col = pQuery.numFields();
+			for(int i=0;i<col;i++)
+			{
+				const char* str =  pQuery.getStringField(i);
+				int			w	=  strlen(str)*ratio;
+				pVecWidth[i]		=  pVecWidth[i]>w?pVecWidth[i]:w;
+
+				pListElement->SetText(i,LPCTSTR(Utf82Unicode(str)));
+				pListElement->SetAttribute(L"wordbreak",L"true");
+			}
+			pQuery.nextRow();
+		}
+	}
+	catch(CppSQLite3Exception e)
+	{
+		throw e;
+	}
+}
+
 void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList)
 {
 	if (DBIndex < 0 )
@@ -630,9 +685,8 @@ void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList)
 	try
 	{
 		CppSQLite3Query query	=	m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
-		int				col		=	query.numFields();
+		int	col					=	query.numFields();
 		vector<int >				vTextLen(col,0);
-		vector<CListHeaderItemUI*>	vHeadItem;
 		
 		CString str(" ");
 		HDC hDC = ::GetDC(this->m_hWnd);
@@ -641,59 +695,17 @@ void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList)
 		::ReleaseDC(this->m_hWnd, hDC);
 		int per = sz.cx+4;
 
-		for (int i = 0; i < col; i++)
-		{
-			const char* res = query.fieldName(i);
-
-			CString Cstr(res);
-			CListHeaderItemUI*  pListHItem = new CListHeaderItemUI;
-			vHeadItem.push_back(pListHItem);
-
-			//获取字体的宽度和高度
-			HDC hDC = ::GetDC(this->m_hWnd);
-			SIZE sz;
-			::GetTextExtentPoint32(hDC, Cstr, Cstr.GetLength(), &sz);
-			::ReleaseDC(this->m_hWnd, hDC);
-			int x = sz.cx;
-
-			vTextLen[i] =  vTextLen[i]>x?vTextLen[i]:x;
-			vTextLen[i] += 60+col+1;
-
-			pListHItem->SetName(Cstr);
-			pListHItem->SetText(Cstr);
-			pListHItem->SetFont(4);
-			pListHItem->SetAttribute(L"hotimage",L"resource/list_header_hot.png");
-			pListHItem->SetAttribute(L"pushedimage",L"resource/list_header_pushed.png");
-			pListHItem->SetAttribute(L"sepimage",L"resource/list_header_sep.png");
-			pListHItem->SetAttribute(L"sepwidth",L"1");
-
-			pList->Add(pListHItem);
-		}
+		AddListHeader(query, pList, vTextLen, per);
 
 		pList->NeedParentUpdate();
 		query = m_vSqliteDB[DBIndex]->execQuery(sql.c_str());
 
-		while(!query.eof())
-		{
-			CListTextElementUI* pListElement = new CListTextElementUI;
-			pList->Add(pListElement);
-
-			int col = query.numFields();
-			for(int i=0;i<col;i++)
-			{
-				const char* str =  query.getStringField(i);
-				int			w	=  strlen(str)*per;
-				vTextLen[i]		=  vTextLen[i]>w?vTextLen[i]:w;
-
-				pListElement->SetText(i,LPCTSTR(Utf82Unicode(str)));
-				pListElement->SetAttribute(L"wordbreak",L"true");
-			}
-			query.nextRow();
-		}
+		AddListTextElem(query, pList, vTextLen, per);
 		query.finalize();
+		CListHeaderUI* pListHeader = pList->GetHeader();
 		for(int i=0;i<col;i++)
 		{
-			vHeadItem[i]->SetFixedWidth(vTextLen[i] + 10);
+			static_cast<CListHeaderItemUI*>(pListHeader->GetItemAt(i))->SetFixedWidth(vTextLen[i] + 10);
 		}
 	}
 	catch(CppSQLite3Exception e)
@@ -757,6 +769,7 @@ void CDuiFrameWnd::Notify(TNotifyUI& msg)
 
 CDuiFrameWnd::~CDuiFrameWnd()
 {
+
 	for (size_t i = 0; i < m_vSqliteDB.size(); i++)
 	{
 		if (m_vSqliteDB[i]->isOpen())

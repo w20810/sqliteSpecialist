@@ -1,6 +1,5 @@
 ﻿#include "stdafx.h"
 #include "CDuiFrame.h"
-#define MAX_LOADSTRING 100
 
 using namespace std;
 
