@@ -11,30 +11,36 @@ public :
 	virtual CDuiString GetSkinFile();
 	virtual CDuiString GetSkinFolder();
 	virtual void InitWindow();
-	virtual void Notify(TNotifyUI& msg);
-	~CDuiFrameWnd();
 
 	//virtual LPCTSTR GetResourceID() const  ; 
 	//virtual UILIB_RESOURCETYPE GetResourceType() const ;
 
-	void AddTreeNodes(int DbIndex,string DBName, vector<char*> vTableName);
+
+	void InitDBNode(CTreeNodeUI* pHeadNode, string DBName);
+	void AddLowerLevelTreeNodes(int DBIndex, vector<char*> vTableName);
+	void AddTreeNodes(int DbIndex, string DBName, vector<char*> vTableName);
+
+	char* GetPowerWordDBPath();
+	void LoadPowerWordDB();
+	void LoadDB(char *PathName, int DBIndex, string DBName);
+
 	void ShowListFromTable(string tabName,int DBIndex);
 	void ShowList(string sql,int DBIndex, CListUI* pList);
-	char* GetPowerWordDBPath();
-	void LoadDB(char *PathName, int DBIndex, string DBName);
+
 	void ExecuteSQL(string sql,int DBIndex);
-	void showDesignList(string tabName,int DBIndex);
-	void UnloadDB();
+	void AddDesignListHeader();
+	void ShowDesignList(string tabName,int DBIndex);
 	void RefreshDB();
-	void LoadPowerWordDB();
+	void UnloadDB();
+	
 	void OnListTextElemActive(TNotifyUI& msg);
 	void OnClickOpenFileBtn();
 	void OnTreeNodeClickOrSelect(TNotifyUI& msg);
 	void OnClickTabSwitch(TNotifyUI& msg);
 	void UpdatePopWnd(TNotifyUI& msg);
-	void AddDesignListHeader();
-	void AddLowerLevelTreeNodes(int DBIndex, vector<char*> vTableName);
-	void InitDBNode(CTreeNodeUI* pHeadNode, string DBName);
+	
+	virtual void Notify(TNotifyUI& msg);
+	~CDuiFrameWnd();
 private :
 	 int								m_iCurDBIndex;   //当前数据库的索引
 	 vector<CppSQLite3DB*>				m_vSqliteDB;     //保存多个数据库

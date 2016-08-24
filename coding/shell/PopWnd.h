@@ -2,28 +2,31 @@
 
 class PopWnd : public WindowImplBase
 {
-
 public:
 	virtual LPCTSTR GetWindowClassName()const ;
 	virtual CDuiString GetSkinFile() ;
 	virtual CDuiString GetSkinFolder();
 	virtual void InitWindow();
-	virtual void Notify(TNotifyUI& msg);
 	
+	void ClearFrame();
+	void LoadFrame();
+
 	void OkAdd();
 	void OkUpdate();
-	void ClearFrame();
+	
+	void OnClickDeleteBtn();
+	void OnClickAddBtn();
+	void OnClickOkBtn();
 	void OnClickPreviousBtn();
 	void OnClickNextBtn();
 	void OnClickFirstBtn();
 	void OnClickLastBtn();
-	void OnClickDeleteBtn();
-	void OnClickAddBtn();
-	void OnClickOkBtn();
-	void LoadFrame();
+
 	void SetParentWnd(CDuiFrameWnd* parentWnd);
 	void AddListTextELem();
 	void DeletAndSelectOtherTextItem(CListUI* pFrameList, CListTextElementUI* &pDeleteTextElem);
+
+	virtual void Notify(TNotifyUI& msg);
 
 private:
 	vector<CLabelUI* >			m_vPropertyName; //表的所有属性的名字
