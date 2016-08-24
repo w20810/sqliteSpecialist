@@ -773,7 +773,8 @@ namespace UiLib
 			int nCount = pControl->GetCountChild();
 			for(int nIndex = 0;nIndex < nCount;nIndex++)
 			{
-				CTreeNodeUI* pNode = pControl->GetChildNode(nIndex);
+				CTreeNodeUI* pNode = pControl->GetChildNode(0); //yuxing 2016/8/24
+			//	CTreeNodeUI* pNode = pControl->GetChildNode(nIndex); Õâ¾äÓÐÎó
 				if(pNode){
 					pControl->Remove(pNode);
 				}

@@ -361,14 +361,8 @@ void CDuiFrameWnd::ShowList(string sql,int DBIndex,CListUI* pList)
 
 void CDuiFrameWnd::ExecuteSQL(string sql, int DBIndex)
 {
-	if (sql.empty())
+	if (sql.empty() || DBIndex < 0)
 	{
-		MessageBoxA(NULL,"Please select the SQL statement.","faild",MB_OK);
-		return ;
-	}
-	if (DBIndex < 0)
-	{
-		MessageBoxA(NULL,"请选择一个数据库","faild",MB_OK);
 		return ;
 	}
 
@@ -454,7 +448,6 @@ void CDuiFrameWnd::RefreshDB()
 {
 	if (m_iCurDBIndex < 0)
 	{
-		MessageBoxA(NULL,"请选择一个数据库","faild",MB_OK);
 		return ;
 	}
 
@@ -462,6 +455,7 @@ void CDuiFrameWnd::RefreshDB()
 	{
  		m_vTreeRootNode[m_iCurDBIndex]->RemoveAt(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
  	}
+//	m_vTreeRootNode[m_iCurDBIndex]->RemoveAll();
 
 	vector<char*>	vTableName;
 	try
@@ -504,7 +498,6 @@ void CDuiFrameWnd::UnloadDB()
 {
 	if (m_iCurDBIndex < 0)
 	{
-		MessageBoxA(NULL,"请选择一个数据库","faild",MB_OK);
 		return ;
 	}
 	if (m_vSqliteDB[m_iCurDBIndex]->isOpen())
@@ -514,15 +507,6 @@ void CDuiFrameWnd::UnloadDB()
 
 	m_pList->RemoveAll();
 	m_pList->GetHeader()->RemoveAll();
-
-
-	while (m_vTreeRootNode[m_iCurDBIndex]->IsHasChild())  
- 	{
- 		m_vTreeRootNode[m_iCurDBIndex]->Remove(m_vTreeRootNode[m_iCurDBIndex]->GetChildNode(0));
- 	}
-	
-	m_vTreeRootNode[m_iCurDBIndex]->RemoveAll();
-
 	m_pTreeView->Remove(m_vTreeRootNode[m_iCurDBIndex]);
 	
 	m_vSqliteDB.erase(m_vSqliteDB.begin()+m_iCurDBIndex);
